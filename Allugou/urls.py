@@ -17,6 +17,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+from rest_framework import routers
+from AllugouApp import views
+
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('test/', views.test, name = 'teste-api'),
+    path('Enderecos/', views.Enderecos_list, name = 'Enderecos')
 ]
