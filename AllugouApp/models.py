@@ -4,7 +4,7 @@ from django.db import models
 #botei on cascade em todos fk pq o django dava erro
 
 class Endereco(models.Model):
-    
+
     cep         = models.CharField(max_length=8  )
     rua         = models.CharField(max_length=30 )
     numero      = models.CharField(max_length=7  )

@@ -15,13 +15,25 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 
 from rest_framework import routers
+from rest_framework.routers import DefaultRouter
+
 from AllugouApp import views
+from AllugouApp.api.viewsets import *
+
+router = DefaultRouter()
+
+router.register(r'Enderecos', EnderecoViewSet, basename = 'Endereços')
+router.register(r'Locatarios', LocatarioViewSet, basename = 'Locatarios')
+router.register(r'Locadores', LocadorViewSet, basename = 'Locadores')
+router.register(r'OfsLoc', OfertaLocacaoViewSet, basename = 'Ofertas de Locação')
+router.register(r'Chats', ChatViewSet, basename = 'Chats')
+router.register(r'ReqsLoc', RequisicaoLocacaoViewSet, basename = 'Requisições de Locação')
+router.register(r'Locacoes', LocacaoViewSet, basename = 'Locações')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('test/', views.test, name = 'teste-api'),
-    path('Enderecos/', views.Enderecos_list, name = 'Enderecos')
+    path('api/', include(router.urls)),
 ]
