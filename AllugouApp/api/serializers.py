@@ -17,10 +17,26 @@ class LocadorSerializer(serializers.ModelSerializer):
         model = Locador
         fields = '__all__'
 
+class ImagemOfertaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ImagemOferta
+        fields = '__all__'
+        read_only_fields = ['dataCriacao']
+
 class OfertaLocacaoSerializer(serializers.ModelSerializer):
+    imagens = ImagemOfertaSerializer(many=True, read_only=True)
+    imagem_principal = serializers.SerializerMethodField()
+
     class Meta:
         model = OfertaLocacao
         fields = '__all__'
+        read_only_fields = ['dataCriacao']
+
+    def get_imagem_principal(self, obj):
+        imagem_principal = obj.imagens.filter(ehImagemPrincipal=True).first()
+        if imagem_principal:
+            return ImagemOfertaSerializer(imagem_principal).data
+        return None
 
 
 class ChatSerializer(serializers.ModelSerializer):

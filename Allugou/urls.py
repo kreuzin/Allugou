@@ -17,6 +17,9 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+from django.conf import settings
+from django.conf.urls.static import static
+
 from rest_framework import routers
 from rest_framework.routers import DefaultRouter
 
@@ -25,15 +28,19 @@ from AllugouApp.api.viewsets import *
 
 router = DefaultRouter()
 
-router.register(r'Enderecos', EnderecoViewSet, basename = 'Endereços')
-router.register(r'Locatarios', LocatarioViewSet, basename = 'Locatarios')
-router.register(r'Locadores', LocadorViewSet, basename = 'Locadores')
-router.register(r'OfsLoc', OfertaLocacaoViewSet, basename = 'Ofertas de Locação')
-router.register(r'Chats', ChatViewSet, basename = 'Chats')
-router.register(r'ReqsLoc', RequisicaoLocacaoViewSet, basename = 'Requisições de Locação')
-router.register(r'Locacoes', LocacaoViewSet, basename = 'Locações')
+router.register(r'enderecos', EnderecoViewSet, basename = 'Endereços')
+router.register(r'locatarios', LocatarioViewSet, basename = 'Locatarios')
+router.register(r'locadores', LocadorViewSet, basename = 'Locadores')
+router.register(r'ofsloc', OfertaLocacaoViewSet, basename = 'Ofertas de Locação')
+router.register(r'imagens-oferta', ImagemOfertaViewSet, basename = 'Imagens das Ofertas')
+router.register(r'chats', ChatViewSet, basename = 'Chats')
+router.register(r'reqsloc', RequisicaoLocacaoViewSet, basename = 'Requisições de Locação')
+router.register(r'locacoes', LocacaoViewSet, basename = 'Locações')
 
 urlpatterns = [
+    path('', include(router.urls)),
     path('admin/', admin.site.urls),
-    path('api/', include(router.urls)),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

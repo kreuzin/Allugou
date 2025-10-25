@@ -7,7 +7,7 @@ from .models import *
 # admin - admindjango dps eu vejo oq faço disso aq
 #vito
 """
-
+#pra usar o admin/
 admin.site.register(Endereco)
 admin.site.register(Locatario)
 admin.site.register(Locador)

@@ -1,0 +1,182 @@
+<template>
+  <div id="wrapper">
+    <nav class="navbar navbar-dark">
+      <div class="container d-flex align-items-center py-2">
+        <a href="/" class="navbar-brand me-4">
+          <span class="brand-text"><strong>All</strong>ugou</span>
+        </a>
+        
+        <form class="search-form flex-grow-1 me-4">
+          <div class="input-group">
+            <input 
+              type="search" 
+              class="form-control search-input" 
+              placeholder="Do que está precisando?"
+              aria-label="Search"
+            />
+            <button class="btn search-button" type="submit">
+              <i class="fa fa-search"></i>
+            </button>
+          </div>
+        </form>
+
+        <div class="notifications me-4">
+          <button class="btn btn-icon">
+            <i class="fa-solid fa-bell"></i>
+          </button>
+        </div>
+        
+        <div class="nav-buttons d-flex gap-2">
+          <a href="#" class="btn btn-outline-light">
+            <i class="fa-regular fa-rectangle-list me-1"></i>
+            Seus anúncios
+          </a>
+          <a href="#" class="btn btn-danger">Anuncie agora!</a>
+          <a href="#" class="btn btn-outline-light">Entrar</a>
+        </div>
+      </div>
+    </nav>
+
+    <section class="text-center py-5">    <!--padding top e  bottom 5-->
+      <router-view/>  <!--Welcome message do vue-->
+    </section>
+
+
+    <footer class="bg-dark text-white py-4 mt-auto">
+      <p class="text-center">Copyright (c) 2025</p>
+    </footer>
+
+  </div>
+</template>
+
+<style lang="scss">
+.navbar {
+  background: linear-gradient(to right, #00251a, #004d40);
+  padding: 0.75rem 0;
+}
+
+.navbar-brand {
+  padding: 0;
+  margin: 0;
+}
+
+.brand-text {
+  font-size: 1.75rem;
+  color: white;
+  letter-spacing: -0.5px;
+}
+
+.search-form {
+  max-width: 600px;
+}
+
+.input-group {
+  border-radius: 50px;
+  overflow: hidden;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.search-input {
+  background: transparent !important;
+  border: none;
+  color: white !important;
+  padding: 0.75rem 1.25rem;
+  font-size: 1rem;
+  border-color: transparent !important;
+}
+
+.search-input::placeholder {
+  color: rgb(255, 255, 255, 0.7) !important;
+  font-weight: 500;
+}
+
+.search-input:focus {
+  box-shadow: none;
+  background: rgba(255, 255, 255, 0.1) !important;
+  outline: none;
+  border-color: transparent;
+}
+
+.search-input:focus-visible {
+  outline: none;
+}
+
+/* Remove default focus ring for all form controls in the navbar */
+.navbar .form-control:focus {
+  outline: none;
+  box-shadow: none;
+  border-color: transparent;
+}
+
+.search-button {
+  background: transparent;
+  border: none;
+  color: #ffffff;
+  padding: 0 1.5rem;
+  font-size: 1.1rem;
+}
+
+.search-button:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+}
+
+.search-button i {
+  color: #ffffff;
+}
+
+.btn-icon {
+  color: #ffffff;
+  font-size: 1.8rem;
+  padding: 0.5rem;
+  line-height: 1;
+}
+
+.btn-icon:hover {
+  color: #ffffff;
+}
+
+.notifications .btn-icon {
+  font-size: 2rem;
+  padding: 0.25rem;
+}
+
+/* Make all icons in navbar white */
+.navbar i {
+  color: #ffffff !important;
+}
+
+.nav-buttons .btn {
+  padding: 0.5rem 1rem;
+  font-weight: 500;
+  border-radius: 4px;
+}
+
+.btn-outline-light {
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.btn-outline-light:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.btn-danger {
+  background-color: #f44336;
+  border: none;
+}
+
+.btn-danger:hover {
+  background-color: #d32f2f;
+}
+
+@media (max-width: 992px) {
+  .nav-buttons {
+    display: none !important;
+  }
+  
+  .notifications {
+    margin-right: 0 !important;
+  }
+}
+</style>
