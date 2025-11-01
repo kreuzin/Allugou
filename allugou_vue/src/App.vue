@@ -2,37 +2,44 @@
   <div id="wrapper">
     <nav class="navbar navbar-dark">
       <div class="container d-flex align-items-center py-2">
-        <a href="/" class="navbar-brand me-4">
+        <router-link to="/" class="navbar-brand me-4">
           <span class="brand-text"><strong>All</strong>ugou</span>
-        </a>
+        </router-link>
         
-        <form class="search-form flex-grow-1 me-4">
-          <div class="input-group">
-            <input 
-              type="search" 
-              class="form-control search-input" 
-              placeholder="Do que está precisando?"
-              aria-label="Search"
-            />
-            <button class="btn search-button" type="submit">
-              <i class="fa fa-search"></i>
+        <template v-if="!isAuthPage">
+          <form class="search-form flex-grow-1 me-4">
+            <div class="input-group">
+              <input 
+                type="search" 
+                class="form-control search-input" 
+                placeholder="Do que está precisando?"
+                aria-label="Buscar"
+              />
+              <button class="btn search-button" type="submit">
+                <i class="fa fa-search"></i>
+              </button>
+            </div>
+          </form>
+
+          <div class="notifications me-4">
+            <button class="btn btn-icon">
+              <i class="fa-solid fa-bell"></i>
             </button>
           </div>
-        </form>
-
-        <div class="notifications me-4">
-          <button class="btn btn-icon">
-            <i class="fa-solid fa-bell"></i>
-          </button>
-        </div>
+        </template>
         
-        <div class="nav-buttons d-flex gap-2">
-          <a href="#" class="btn btn-outline-light">
-            <i class="fa-regular fa-rectangle-list me-1"></i>
-            Seus anúncios
-          </a>
-          <a href="#" class="btn btn-danger">Anuncie agora!</a>
-          <a href="#" class="btn btn-outline-light">Entrar</a>
+        <div class="nav-buttons d-flex gap-2" v-if="!isAuthPage">
+          <template v-if="isAuthenticated">
+            <router-link to="/ads" class="btn btn-outline-light">
+              <i class="fa-regular fa-rectangle-list me-1"></i>
+              Seus anúncios
+            </router-link>
+            <router-link to="/new-ad" class="btn btn-danger">Anuncie agora!</router-link>
+            <button @click="handleLogout" class="btn btn-outline-light">Sair</button>
+          </template>
+          <template v-else>
+            <router-link to="/login" class="btn btn-outline-light">Entrar</router-link>
+          </template>
         </div>
       </div>
     </nav>
@@ -48,6 +55,35 @@
 
   </div>
 </template>
+
+<script>
+import { computed } from 'vue'
+import { useStore } from 'vuex'
+import { useRouter } from 'vue-router'
+
+export default {
+  name: 'App',
+  data() {
+    return {
+      isAuthenticated: false
+    }
+  },
+  computed: {
+    isAuthPage() {
+      return this.$route.path === '/login' || this.$route.path === '/register'
+    }
+  },
+  methods: {
+    async handleLogout() {
+      await this.$store.dispatch('auth/logout')
+      this.$router.push('/login')
+    }
+  },
+  created() {
+    this.isAuthenticated = this.$store.getters['auth/isAuthenticated']
+  }
+}
+</script>
 
 <style lang="scss">
 .navbar {

@@ -3,9 +3,13 @@
     <HomeHero :categories="categories" />
     
     <section class="products-section py-5">
+      <div class="section-header-wrapper">
+        <div class="container">
+          <h2 class="section-title mb-4">Ofertas de locação</h2>
+        </div>
+      </div>
+
       <div class="container">
-        <h2 class="section-title mb-4">Ofertas de locação</h2>
-        
         <div v-if="error" class="alert alert-danger" role="alert">
           {{ error }}
         </div>
@@ -148,15 +152,45 @@ export default {
   background: #fff;
 }
 
+/* Section header with full-width horizontal line */
+.section-header-wrapper {
+  position: relative;
+  width: 100%;
+  padding: 1rem 0 0.5rem; /* space around the title */
+}
+.section-header-wrapper::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 2px;
+  background: linear-gradient(90deg, rgba(0,0,0,0.08), rgba(0,0,0,0.12));
+  transform: translateY(-50%);
+  z-index: 0;
+}
+.section-header-wrapper .container {
+  position: relative;
+  z-index: 1; /* keep title above the line */
+  display: flex;
+  justify-content: center;
+}
 .section-title {
+  display: inline-block;
+  margin: 0;
+  padding: 0 1rem;
+  background: #f8f9fa; /* mask the horizontal line behind the title */
   font-size: 1.75rem;
   font-weight: 700;
   color: #2d3436;
+  text-align: center;
+  white-space: nowrap;
 }
 
 .products-section {
   background-color: #f8f9fa;
   border-bottom: 1px solid #e9ecef;
+  padding-top: 0; /* header wrapper handles top padding */
 }
 
 .products-grid {

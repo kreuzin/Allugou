@@ -25,6 +25,9 @@ from rest_framework.routers import DefaultRouter
 
 from AllugouApp import views
 from AllugouApp.api.viewsets import *
+from AllugouApp.api.authentication import LoginView, LogoutView, GetCSRFToken, RegisterView
+from django.urls import re_path
+from django.contrib.auth import views as auth_views
 
 router = DefaultRouter()
 
@@ -40,6 +43,11 @@ router.register(r'locacoes', LocacaoViewSet, basename = 'Locações')
 urlpatterns = [
     path('', include(router.urls)),
     path('admin/', admin.site.urls),
+    # API Authentication endpoints
+    path('api/login/', LoginView.as_view(), name='api_login'),
+    path('api/logout/', LogoutView.as_view(), name='api_logout'),
+    path('api/csrf/', GetCSRFToken.as_view(), name='api_csrf'),
+    path('api/register/', RegisterView.as_view(), name='api_register'),
 ]
 
 if settings.DEBUG:
