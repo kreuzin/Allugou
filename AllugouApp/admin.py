@@ -3,8 +3,8 @@ from .models import *
 
 
 """
-# super usuário
-# admin - admin django depois eu vejo o que faço disso aqui
+# superuser
+# admin - admindjango depois eu vejo o que faço disso aqui
 # vito
 """
 # para usar o admin/
