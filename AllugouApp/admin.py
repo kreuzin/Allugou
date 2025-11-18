@@ -3,11 +3,11 @@ from .models import *
 
 
 """
-#superuser
-# admin - admindjango dps eu vejo oq faço disso aq
-#vito
+# super usuário
+# admin - admin django depois eu vejo o que faço disso aqui
+# vito
 """
-#pra usar o admin/
+# para usar o admin/
 admin.site.register(Endereco)
 admin.site.register(Locatario)
 admin.site.register(Locador)
@@ -15,3 +15,4 @@ admin.site.register(OfertaLocacao)
 admin.site.register(Chat)
 admin.site.register(RequisicaoLocacao)
 admin.site.register(Locacao)
+

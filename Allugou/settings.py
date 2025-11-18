@@ -80,6 +80,9 @@ CSRF_TRUSTED_ORIGINS = [
     "http://localhost:8080",
     "http://127.0.0.1:8080",
 ]
+CSRF_COOKIE_SECURE = False
+CSRF_COOKIE_HTTPONLY = False
+CSRF_COOKIE_SAMESITE = 'Lax'
 
 ROOT_URLCONF = 'Allugou.urls'
 
@@ -138,7 +141,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-# Custom password validation error messages in Portuguese
+# mensagens de erro de validação de senha personalizadas em português
 AUTH_PASSWORD_VALIDATORS_HELP_TEXTS = {
     'UserAttributeSimilarityValidator': 'Sua senha não pode ser muito similar ao seu nome de usuário ou e-mail.',
     'MinimumLengthValidator': 'Sua senha precisa conter pelo menos 8 caracteres.',
@@ -174,6 +177,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 
-# Redirect after login
+# redirecionar após login
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'

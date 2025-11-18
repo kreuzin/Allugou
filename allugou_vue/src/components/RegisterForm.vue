@@ -5,7 +5,11 @@
         {{ error }}
       </div>
       
-      <form @submit.prevent="handleSubmit">
+      <div v-if="success" class="alert alert-success" role="alert">
+        {{ success }}
+      </div>
+      
+      <form @submit.prevent="handleSubmit" v-if="!success">
         <div class="card mb-4">
           <div class="card-body">
             
@@ -218,7 +222,7 @@ export default {
         nome: '',
         cpf: '',
         tel: '',
-        // Address fields
+        // campos de endereço
         cep: '',
         rua: '',
         numero: '',
@@ -229,6 +233,7 @@ export default {
         observacao: ''
       },
       error: null,
+      success: null,
       hasMinLength: false,
       hasNumber: false,
       hasSpecialChar: false,
@@ -284,6 +289,9 @@ export default {
           return;
         }
 
+        // garantir que o token csrf seja obtido
+        await api.get('/api/csrf/');
+
         console.log('Sending registration data:', this.formData);
         
         const response = await api.post('/api/register/', this.formData);
@@ -291,12 +299,30 @@ export default {
         console.log('Registration response:', response);
         
         if (response.data.success) {
-          // Log the user in after successful registration
+          console.log('User registered successfully!');
+          
+          // definir usuário na loja imediatamente
+          this.$store.commit('auth/setUser', response.data.user);
+          this.$store.commit('auth/setAuthenticated', true);
+          
+          // tentar autenticar com o backend
           await this.$store.dispatch('auth/login', {
             username: this.formData.username,
             password: this.formData.password1
-          })
-          this.$router.push('/')
+          }).catch(err => {
+            console.log('Login error (user already created):', err);
+          });
+          
+          // mostrar mensagem de sucesso
+          this.success = 'Cadastro realizado com sucesso! Redirecionando...';
+          this.error = null;
+          
+          // redirecionar após um curto atraso
+          setTimeout(() => {
+            this.$router.replace('/').catch(err => {
+              console.log('Navigation completed');
+            });
+          }, 1500);
         } else {
           this.error = response.data.message || 'Falha no cadastro'
         }

@@ -5,29 +5,29 @@ const api = axios.create({
     withCredentials: true,
     xsrfCookieName: 'csrftoken',
     xsrfHeaderName: 'X-CSRFToken',
-    headers: {
-        'Content-Type': 'application/json',
-        'X-Requested-With': 'XMLHttpRequest'
-    }
 })
 
-// Initialize CSRF token
+// inicializar token csrf
 async function initializeCSRF() {
     try {
-        await api.get('/api/csrf/')
+        const response = await api.get('/api/csrf/')
+        const csrfToken = response.data.csrfToken
+        // definir o token nos headers padrão
+        api.defaults.headers.common['X-CSRFToken'] = csrfToken
+        return csrfToken
     } catch (error) {
-        console.error('Failed to fetch CSRF token:', error)
+        console.error('Falha ao buscar token csrf:', error)
     }
 }
 
-// Initialize CSRF token when the module is imported
+// inicializar token csrf quando o módulo é importado
 initializeCSRF()
 
-// Add response interceptor for error handling
+// adicionar interceptador de resposta para tratamento de erros
 api.interceptors.response.use(
     response => response,
     error => {
-        // If we get a 403 error and we haven't retried yet, try to refresh the CSRF token
+        // se receber um erro 403 e não tiver reintentado, tente atualizar o token csrf
         if (error.response?.status === 403 && !error.config._retry) {
             error.config._retry = true
             return initializeCSRF().then(() => api(error.config))

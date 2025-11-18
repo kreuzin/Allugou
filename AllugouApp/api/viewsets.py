@@ -12,7 +12,7 @@ from rest_framework.response import Response
 
 class EnderecoViewSet(viewsets.ModelViewSet):
     
-    # permission_classes = [permissions.IsAuthenticated] se nao tiver logado como admin: mort
+    # permission_classes = [permissions.IsAuthenticated] se não estiver logado como admin: morrer
 
     serializer_class = EnderecoSerializer
     queryset = Endereco.objects.all()
@@ -50,7 +50,7 @@ class ImagemOfertaViewSet(viewsets.ModelViewSet):
         eh_principal = request.data.get('ehImagemPrincipal', False)
         
         if eh_principal:
-            # Se a nova imagem é principal, remove o status de principal das outras
+            # se a nova imagem é principal, remove o status de principal das outras
             ImagemOferta.objects.filter(
                 ofertaLocacao_id=oferta_id,
                 ehImagemPrincipal=True

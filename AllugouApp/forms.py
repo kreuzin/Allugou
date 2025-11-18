@@ -4,18 +4,18 @@ from .models import Endereco, Locador
 
 
 class RegisterLocadorForm(forms.Form):
-    # User fields
+    # campos do usuário
     username = forms.CharField(label='Nome de usuário', max_length=150)
     email = forms.EmailField(label='E-mail')
     password = forms.CharField(label='Senha', widget=forms.PasswordInput)
     password2 = forms.CharField(label='Confirme a senha', widget=forms.PasswordInput)
 
-    # Locador fields
+    # campos do locador
     nome = forms.CharField(label='Nome completo', max_length=100)
     cpf = forms.CharField(label='CPF', max_length=11)
     tel = forms.CharField(label='Telefone', max_length=11)
 
-    # Endereco fields
+    # campos de endereço
     cep = forms.CharField(label='CEP', max_length=8)
     rua = forms.CharField(label='Rua', max_length=30)
     numero = forms.CharField(label='Número', max_length=7)

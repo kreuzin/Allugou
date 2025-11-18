@@ -75,7 +75,7 @@ export default {
           throw new Error('No response data received')
         }
 
-        // Check if the response is paginated or direct array
+        // verificar se a resposta é paginada ou uma matriz direta
         let ofertas = []
         if (Array.isArray(response.data)) {
           console.log('Response is an array')
@@ -100,14 +100,14 @@ export default {
         this.products = ofertas.map(oferta => {
           console.log('Processing individual oferta:', oferta)
           
-          // Extract location from nested data
+          // extrair localização de dados aninhados
           let location = 'Localização não informada'
           if (oferta.locador && oferta.locador.endereco) {
             const endereco = oferta.locador.endereco
             location = `${endereco.cidade}${endereco.estado ? ` - ${endereco.estado}` : ''}`
           }
 
-          // Get image URL from the main image or first available image
+          // obter URL da imagem da imagem principal ou primeira imagem disponível
           let imageUrl = 'https://via.placeholder.com/800x600?text=Sem+Imagem'
           if (oferta.imagem_principal && oferta.imagem_principal.imagem) {
             imageUrl = getMediaUrl(oferta.imagem_principal.imagem)
@@ -124,7 +124,7 @@ export default {
             location: location,
             image: imageUrl,
             ofereceEntrega: oferta.ofereceEntrega || false,
-            rawData: oferta // Keep raw data for debugging
+            rawData: oferta // manter dados brutos para depuração
           }
           console.log('Mapped product:', mapped)
           return mapped
@@ -141,7 +141,7 @@ export default {
     },
     handleProductClick(product) {
       console.log('Product clicked:', product)
-      // TODO: Navigate to product detail or show modal
+      // TODO: navegar para detalhe do produto ou mostrar modal
     }
   }
 }
@@ -152,11 +152,11 @@ export default {
   background: #fff;
 }
 
-/* Section header with full-width horizontal line */
+/* cabeçalho de seção com linha horizontal de largura total */
 .section-header-wrapper {
   position: relative;
   width: 100%;
-  padding: 1rem 0 0.5rem; /* space around the title */
+  padding: 1rem 0 0.5rem; /* espaço ao redor do título */
 }
 .section-header-wrapper::before {
   content: '';
@@ -171,7 +171,7 @@ export default {
 }
 .section-header-wrapper .container {
   position: relative;
-  z-index: 1; /* keep title above the line */
+  z-index: 1; /* manter título acima da linha */
   display: flex;
   justify-content: center;
 }
@@ -179,7 +179,7 @@ export default {
   display: inline-block;
   margin: 0;
   padding: 0 1rem;
-  background: #f8f9fa; /* mask the horizontal line behind the title */
+  background: #f8f9fa; /* mascarar a linha horizontal atrás do título */
   font-size: 1.75rem;
   font-weight: 700;
   color: #2d3436;
@@ -190,7 +190,7 @@ export default {
 .products-section {
   background-color: #f8f9fa;
   border-bottom: 1px solid #e9ecef;
-  padding-top: 0; /* header wrapper handles top padding */
+  padding-top: 0; /* o wrapper do cabeçalho lida com o preenchimento superior */
 }
 
 .products-grid {

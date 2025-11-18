@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 
 
 
-#botei on cascade em todos fk pq o django dava erro
+# coloquei on_delete=CASCADE em todos os ForeignKey porque o django dava erro sem
 
 class Endereco(models.Model):
 
@@ -17,7 +17,7 @@ class Endereco(models.Model):
     observacao  = models.CharField(max_length=255, null=True)
 
     class Meta:
-        verbose_name_plural = 'Endereços' #admin page retornaria Enderecos normalmente
+        verbose_name_plural = 'Endereços' # página de admin retornaria endereços normalmente
     
     def __str__(self):
         return f"{self.rua}, {self.numero} - {self.bairro}, {self.cidade} - {self.estado}, {self.cep}"
@@ -32,7 +32,7 @@ class Locatario(models.Model):
     cpf   = models.CharField(max_length=11, unique=True)
     nome  = models.CharField(max_length=100)
     email = models.EmailField(unique=True)
-    senha = models.CharField(max_length=30 )
+    senha = models.CharField(max_length=128)
 
     class Meta:
        verbose_name_plural = 'Locatários' 
@@ -48,10 +48,10 @@ class Locador(models.Model):
     cpf   = models.CharField(max_length=11, unique=True)
     nome  = models.CharField(max_length=100)
     email = models.EmailField(unique=True)
-    senha = models.CharField(max_length=30 )
+    senha = models.CharField(max_length=128)
 
     class Meta:
-        verbose_name_plural = 'Locadores' #admin page retornaria  Locadors normalmente 
+        verbose_name_plural = 'Locadores' # página de admin retornaria locadores normalmente 
 
     def __str__(self):
         return self.user
@@ -63,7 +63,7 @@ class OfertaLocacao(models.Model):
     valorDiaria    = models.FloatField()
     titulo         = models.CharField(max_length=50 )
     descricao      = models.CharField(max_length=255)
-    ofereceEntrega = models.BooleanField() #? esqueci oq e isso exatamente, eh se a pessoa entrega ou tem q ir buscar ne
+    ofereceEntrega = models.BooleanField() # se a pessoa oferece entrega ou se o cliente precisa buscar
     dataCriacao    = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -111,7 +111,7 @@ class RequisicaoLocacao(models.Model):
     # locador = models.ForeignKey(Locador) se pa n precisa
 
     dataInicio    = models.DateTimeField(auto_now_add=True)
-    dataConclusao = models.DateTimeField(null= True)  #vem depois
+    dataConclusao = models.DateTimeField(null= True)  # vem depois
 
     class Meta:
         verbose_name_plural = 'Requisição de Locação'
@@ -135,7 +135,7 @@ class Locacao(models.Model):
     preco         = models.FloatField()
     frete         = models.FloatField()
 
-    #0 a 10
+    # de 0 a 10
     notaParaLocador = models.IntegerField(null=True)
     notaParaLocatario = models.IntegerField(null=True)
 

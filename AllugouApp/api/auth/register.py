@@ -18,28 +18,28 @@ def register_view(request):
         email = data.get('email')
         password = data.get('password1')
 
-        # Validate required fields
+        # validar campos obrigatórios
         if not all([username, email, password]):
             return Response({
                 'success': False,
                 'message': 'Por favor, preencha todos os campos obrigatórios'
             }, status=status.HTTP_400_BAD_REQUEST)
 
-        # Check if username already exists
+        # verificar se o nome de usuário já existe
         if User.objects.filter(username=username).exists():
             return Response({
                 'success': False,
                 'message': 'Nome de usuário já está em uso'
             }, status=status.HTTP_400_BAD_REQUEST)
 
-        # Check if email already exists
+        # verificar se o e-mail já existe
         if User.objects.filter(email=email).exists():
             return Response({
                 'success': False,
                 'message': 'E-mail já está cadastrado'
             }, status=status.HTTP_400_BAD_REQUEST)
 
-        # Validate password
+        # validar senha
         try:
             validate_password(password)
         except ValidationError as e:
@@ -48,7 +48,7 @@ def register_view(request):
                 'message': ' '.join(e.messages)
             }, status=status.HTTP_400_BAD_REQUEST)
 
-        # Create user
+        # criar usuário
         user = User.objects.create_user(
             username=username,
             email=email,
@@ -70,7 +70,7 @@ def register_view(request):
             'message': 'Erro de validação: ' + ' '.join(e.messages)
         }, status=status.HTTP_400_BAD_REQUEST)
     except Exception as e:
-        # Log the error details for debugging
+        # registrar detalhes do erro para depuração
         print(f"Erro no registro: {str(e)}")
         import traceback
         print(traceback.format_exc())

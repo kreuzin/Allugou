@@ -4,7 +4,7 @@ from rest_framework import serializers
 class EnderecoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Endereco
-        # ['cep', 'rua', 'numero', 'bairro','cidade', 'estado', 'complemento', 'observacao']
+        # lista de campos: ['cep', 'rua', 'numero', 'bairro','cidade', 'estado', 'complemento', 'observacao']
         fields = '__all__'
 
 class LocatarioSerializer(serializers.ModelSerializer):

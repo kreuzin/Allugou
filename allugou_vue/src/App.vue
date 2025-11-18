@@ -137,7 +137,7 @@ export default {
   outline: none;
 }
 
-/* Remove default focus ring for all form controls in the navbar */
+/* remover anel de foco padrão para todos os controles de formulário na barra de navegação */
 .navbar .form-control:focus {
   outline: none;
   box-shadow: none;
@@ -177,7 +177,7 @@ export default {
   padding: 0.25rem;
 }
 
-/* Make all icons in navbar white */
+/* fazer todos os ícones da barra de navegação branco */
 .navbar i {
   color: #ffffff !important;
 }

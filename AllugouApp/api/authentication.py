@@ -2,13 +2,15 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth import authenticate, login, logout
-from django.views.decorators.csrf import ensure_csrf_cookie
+from django.views.decorators.csrf import ensure_csrf_cookie, csrf_exempt
 from django.utils.decorators import method_decorator
 from django.contrib.auth.models import User
 from django.middleware.csrf import get_token
 from django.db import transaction
 from .user_serializer import UserSerializer
 from ..models import Locador, Locatario, Endereco
+
+
 
 @method_decorator(ensure_csrf_cookie, name='post')
 class LoginView(APIView):
@@ -51,17 +53,22 @@ class GetCSRFToken(APIView):
     def get(self, request):
         return Response({'csrfToken': get_token(request)})
 
+@method_decorator(ensure_csrf_cookie, name='post')
 class RegisterView(APIView):
     @transaction.atomic
     def post(self, request):
         try:
-            # Extract common data
-            user_type = request.data.get('user_type')  # 'locador' or 'locatario'
+            print(f"requisição de registro recebida com dados: {request.data}")
+            
+            # extrair dados comuns
+            user_type = request.data.get('user_type')  # 'locador' ou 'locatario'
             username = request.data.get('username')
             email = request.data.get('email')
             password = request.data.get('password1')
             
-            # Extract address data
+            print(f"user_type: {user_type}, username: {username}, email: {email}")
+            
+            # extrair dados de endereço
             endereco_data = {
                 'cep': request.data.get('cep'),
                 'rua': request.data.get('rua'),
@@ -73,74 +80,77 @@ class RegisterView(APIView):
                 'observacao': request.data.get('observacao')
             }
 
-            # Extract user-specific data
+            # extrair dados específicos do usuário
             user_data = {
                 'user': username,
                 'tel': request.data.get('tel'),
                 'cpf': request.data.get('cpf'),
                 'nome': request.data.get('nome'),
                 'email': email,
-                'senha': password  # Note: We'll use Django's auth user for actual authentication
+                'senha': password  # nota: usaremos o usuário de autenticação do django
             }
 
-            # Validate required fields
-            required_fields = ['username', 'email', 'password1', 'tel', 'cpf', 'nome', 
+            # validar campos obrigatórios
+            required_fields = ['user_type', 'username', 'email', 'password1', 'tel', 'cpf', 'nome', 
                              'cep', 'rua', 'numero', 'bairro', 'cidade', 'estado']
             
             for field in required_fields:
                 if not request.data.get(field):
                     return Response({
                         'success': False,
-                        'message': f'O campo {field} é obrigatório.'
+                        'message': f'o campo {field} é obrigatório.'
                     }, status=status.HTTP_400_BAD_REQUEST)
 
-            # Create Django auth user
+            # criar usuário de autenticação do django
             if User.objects.filter(username=username).exists():
                 return Response({
                     'success': False,
-                    'message': 'Nome de usuário já está em uso.'
+                    'message': 'nome de usuário já está em uso.'
                 }, status=status.HTTP_400_BAD_REQUEST)
 
             if User.objects.filter(email=email).exists():
                 return Response({
                     'success': False,
-                    'message': 'E-mail já está em uso.'
+                    'message': 'e-mail já está em uso.'
                 }, status=status.HTTP_400_BAD_REQUEST)
 
-            # Create the auth user
+            # criar o usuário de autenticação
             auth_user = User.objects.create_user(
                 username=username,
                 email=email,
                 password=password
             )
 
-            # Create address
+            # criar endereço
             endereco = Endereco.objects.create(**endereco_data)
 
-            # Create specific user type
+            # criar tipo específico de usuário
             user_data['endereco'] = endereco
             if user_type == 'locador':
                 if Locador.objects.filter(cpf=user_data['cpf']).exists():
-                    raise ValueError('CPF já cadastrado como locador.')
+                    raise ValueError('cpf já cadastrado como locador.')
                 user_model = Locador.objects.create(**user_data)
             elif user_type == 'locatario':
                 if Locatario.objects.filter(cpf=user_data['cpf']).exists():
-                    raise ValueError('CPF já cadastrado como locatário.')
+                    raise ValueError('cpf já cadastrado como locatário.')
                 user_model = Locatario.objects.create(**user_data)
             else:
-                raise ValueError('Tipo de usuário inválido.')
+                raise ValueError('tipo de usuário inválido.')
 
-            # Log the user in
+            # fazer login do usuário
             login(request, auth_user)
 
             return Response({
                 'success': True,
-                'message': 'Usuário registrado com sucesso!',
+                'message': 'usuário registrado com sucesso!',
                 'user': UserSerializer(auth_user).data,
                 'user_type': user_type
             }, status=status.HTTP_201_CREATED)
 
         except Exception as e:
+            import traceback
+            print(f"erro no registro: {str(e)}")
+            print(f"traceback: {traceback.format_exc()}")
             return Response({
                 'success': False,
                 'message': str(e)

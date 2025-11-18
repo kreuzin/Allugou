@@ -83,14 +83,14 @@ export default {
   margin: 0 -0.5rem;
 }
 
-/* Hide scrollbar but keep functionality */
+/* ocultar barra de rolagem mas manter funcionalidade */
 .track {
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE/Edge */
+  scrollbar-width: none; /* firefox */
+  -ms-overflow-style: none; /* ie/edge */
 }
 
 .track::-webkit-scrollbar {
-  display: none; /* Chrome/Safari/Opera */
+  display: none; /* chrome/safari/opera */
 }
 
 @media (max-width: 768px) {

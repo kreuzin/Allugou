@@ -12,7 +12,7 @@ def login_view(request):
         user = authenticate(username=username, password=password)
         if user is not None:
             login(request, user)
-            # Get associated Locador if exists
+            # obter locador associado se existir
             from AllugouApp.models import Locador
             try:
                 locador = Locador.objects.get(user=username)

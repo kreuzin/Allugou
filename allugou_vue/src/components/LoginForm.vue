@@ -51,7 +51,7 @@ export default {
       })
 
       if (success) {
-        this.$router.push('/') // ir pra homepage se o login for bem-sucedido
+        this.$router.push('/') // ir para a homepage se o login for bem-sucedido
       }
     }
   }
