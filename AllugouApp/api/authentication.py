@@ -38,7 +38,9 @@ class LoginView(APIView):
                 'message': 'Nome de usuário ou senha incorretos.'
             }, status=status.HTTP_401_UNAUTHORIZED)
 
+@method_decorator(csrf_exempt, name='dispatch')
 class LogoutView(APIView):
+    """logout sem csrf para protótipo: evita falhas intermitentes de csrf durante logout"""
     def post(self, request):
         if not request.user.is_authenticated:
             return Response({
@@ -49,7 +51,9 @@ class LogoutView(APIView):
         logout(request)
         return Response({'success': True})
 
+@method_decorator(ensure_csrf_cookie, name='get')
 class GetCSRFToken(APIView):
+    """retorna o token csrf e garante que o cookie csrf seja definido"""
     def get(self, request):
         return Response({'csrfToken': get_token(request)})
 

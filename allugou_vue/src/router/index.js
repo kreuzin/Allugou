@@ -40,6 +40,12 @@ const router = new VueRouter({
 
 // guarda de navegação
 router.beforeEach((to, from, next) => {
+  // se o usuário autenticado tentar acessar login/register, redireciona para home
+  if ((to.path === '/login' || to.path === '/register') && store.getters['auth/isAuthenticated']) {
+    next({ path: '/' })
+    return
+  }
+
   if (to.matched.some(record => record.meta.requiresAuth)) {
     if (!store.getters['auth/isAuthenticated']) {
       next({

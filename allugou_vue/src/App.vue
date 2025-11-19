@@ -28,13 +28,19 @@
           </div>
         </template>
         
-        <div class="nav-buttons d-flex gap-2" v-if="!isAuthPage">
+
+        <!-- se nao for a pagina do login mostra funções extras -->
+        <div class="nav-buttons d-flex gap-2 align-items-center" v-if="!isAuthPage">
           <template v-if="isAuthenticated">
             <router-link to="/ads" class="btn btn-outline-light">
               <i class="fa-regular fa-rectangle-list me-1"></i>
               Seus anúncios
             </router-link>
             <router-link to="/new-ad" class="btn btn-danger">Anuncie agora!</router-link>
+            <div class="d-flex align-items-center ms-2 me-2 text-white">
+              <i class="fa-regular fa-user me-1"></i>
+              <span>{{ user?.nome || user?.username }}</span>
+            </div>
             <button @click="handleLogout" class="btn btn-outline-light">Sair</button>
           </template>
           <template v-else>
@@ -61,26 +67,32 @@ import { computed } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 
+
+
 export default {
   name: 'App',
-  data() {
-    return {
-      isAuthenticated: false
-    }
-  },
   computed: {
+    // página de autenticação (login / register)
     isAuthPage() {
       return this.$route.path === '/login' || this.$route.path === '/register'
+    },
+
+    // estado reativo vindo do vuex
+    isAuthenticated() {
+      return this.$store.getters['auth/isAuthenticated']
+    },
+
+    // usuário atual vindo do vuex
+    user() {
+      return this.$store.getters['auth/user']
     }
   },
   methods: {
     async handleLogout() {
       await this.$store.dispatch('auth/logout')
-      this.$router.push('/login')
+      // usar replace e suprimir erros de redirecionamento concorrente
+      this.$router.replace('/login').catch(() => {})
     }
-  },
-  created() {
-    this.isAuthenticated = this.$store.getters['auth/isAuthenticated']
   }
 }
 </script>
