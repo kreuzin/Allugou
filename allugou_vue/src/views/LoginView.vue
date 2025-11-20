@@ -4,6 +4,9 @@
     <LoginForm />
     <div class="text-center mt-3">
       <router-link to="/register">Não tem uma conta? Cadastre-se aqui</router-link>
+      <div class="mt-2">
+        <router-link to="/forgot-password">Esqueci minha senha</router-link>
+      </div>
     </div>
   </div>
 </template>

@@ -36,6 +36,7 @@ urlpatterns = [
     path('api/login/', LoginView.as_view(), name='api_login'),
     path('api/logout/', LogoutView.as_view(), name='api_logout'),
     path('api/csrf/', GetCSRFToken.as_view(), name='api_csrf'),
+    path('api/password-reset/', PasswordResetView.as_view(), name='api_password_reset'),
     path('api/register/', RegisterView.as_view(), name='api_register'),
 ]
 

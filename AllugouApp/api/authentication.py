@@ -159,3 +159,24 @@ class RegisterView(APIView):
                 'success': False,
                 'message': str(e)
             }, status=status.HTTP_400_BAD_REQUEST)
+
+
+class PasswordResetView(APIView):
+    """endpoint simples para solicitar redefinição de senha via email"""
+    def post(self, request):
+        email = request.data.get('email')
+        if not email:
+            return Response({'success': False, 'message': 'e-mail é obrigatório.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        from django.contrib.auth.forms import PasswordResetForm
+
+        form = PasswordResetForm({'email': email})
+        if form.is_valid():
+            # envia email usando a configuração de email do django (console backend em dev)
+            try:
+                form.save(request=request, use_https=False, from_email=None, email_template_name='registration/password_reset_email.html')
+                return Response({'success': True, 'message': 'Instruções de redefinição enviadas se o e-mail existir.'})
+            except Exception as e:
+                return Response({'success': False, 'message': f'erro ao enviar e-mail: {str(e)}'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        else:
+            return Response({'success': False, 'message': 'e-mail inválido.'}, status=status.HTTP_400_BAD_REQUEST)
