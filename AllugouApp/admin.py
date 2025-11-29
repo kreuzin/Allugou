@@ -12,7 +12,7 @@ admin.site.register(Endereco)
 admin.site.register(Locatario)
 admin.site.register(Locador)
 admin.site.register(OfertaLocacao)
-admin.site.register(Chat)
 admin.site.register(RequisicaoLocacao)
+admin.site.register(Mensagem)
 admin.site.register(Locacao)
 

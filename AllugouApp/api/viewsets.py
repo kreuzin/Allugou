@@ -66,10 +66,17 @@ class ImagemOfertaViewSet(viewsets.ModelViewSet):
         return queryset
 
 
-class ChatViewSet(viewsets.ModelViewSet):
+class MensagemViewSet(viewsets.ModelViewSet):
     
-    serializer_class = ChatSerializer
-    queryset = Chat.objects.all()
+    serializer_class = MensagemSerializer
+    queryset = Mensagem.objects.all()
+    
+    def get_queryset(self):
+        queryset = Mensagem.objects.all()
+        requisicao_id = self.request.query_params.get('requisicao', None)
+        if requisicao_id is not None:
+            queryset = queryset.filter(requisicao_id=requisicao_id)
+        return queryset
 
 
 class RequisicaoLocacaoViewSet(viewsets.ModelViewSet):

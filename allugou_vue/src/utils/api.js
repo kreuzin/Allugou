@@ -7,13 +7,13 @@ const api = axios.create({
     xsrfHeaderName: 'X-CSRFToken',
 })
 
-// util para ler cookie pelo nome
+// pega cookie pelo nome
 function getCookie(name) {
     const match = document.cookie.match(new RegExp('(^|; )' + name + '=([^;]+)'))
     return match ? decodeURIComponent(match[2]) : null
 }
 
-// inicializar token csrf se necessário (chamada explícita)
+// busca o token csrf se precisar
 async function initializeCSRF() {
     try {
         const response = await api.get('/api/csrf/')
@@ -24,7 +24,7 @@ async function initializeCSRF() {
     }
 }
 
-// interceptador de requisição: sempre define header x-csrftoken com o cookie atual
+// antes de cada request: joga o csrf no header
 api.interceptors.request.use(config => {
     try {
         const csrftoken = getCookie('csrftoken')
@@ -37,14 +37,14 @@ api.interceptors.request.use(config => {
     return config
 })
 
-// adicionar interceptador de resposta para tratamento de erros
+// trata erros de resposta
 api.interceptors.response.use(
     response => response,
     error => {
-        // se receber um erro 403 e não tiver reintentado, tente atualizar o token csrf
+        // se der 403 e nao tentou ainda, atualiza csrf e tenta de novo
         if (error.response?.status === 403 && !error.config._retry) {
             error.config._retry = true
-            // buscar novo token e tentar novamente
+            // pega token novo e manda de novo
             return initializeCSRF().then(() => api(error.config))
         }
         return Promise.reject(error)

@@ -268,6 +268,7 @@ export default {
   },
   methods: {
     validatePassword() {
+      // pra checar os requisitos da senha em tempo real
       const password = this.formData.password1;
       this.hasMinLength = password.length >= 8;
       this.hasNumber = /\d/.test(password);
@@ -303,6 +304,7 @@ export default {
           
           // definir usuário na loja imediatamente
           this.$store.commit('auth/setUser', response.data.user);
+          this.$store.commit('auth/setUserType', response.data.user_type);
           this.$store.commit('auth/setAuthenticated', true);
           
           // tentar autenticar com o backend

@@ -26,6 +26,7 @@ class ImagemOfertaSerializer(serializers.ModelSerializer):
 class OfertaLocacaoSerializer(serializers.ModelSerializer):
     imagens = ImagemOfertaSerializer(many=True, read_only=True)
     imagem_principal = serializers.SerializerMethodField()
+    localizacao_completa = serializers.SerializerMethodField()
 
     class Meta:
         model = OfertaLocacao
@@ -37,18 +38,27 @@ class OfertaLocacaoSerializer(serializers.ModelSerializer):
         if imagem_principal:
             return ImagemOfertaSerializer(imagem_principal).data
         return None
+    
+    def get_localizacao_completa(self, obj):
+        if obj.localizacao:
+            return f"{obj.localizacao.bairro}, {obj.localizacao.cidade} - {obj.localizacao.estado}"
+        return "localização não informada"
 
 
-class ChatSerializer(serializers.ModelSerializer):
+class MensagemSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Chat
+        model = Mensagem
         fields = '__all__'
+        read_only_fields = ['enviadoEm']
 
 
 class RequisicaoLocacaoSerializer(serializers.ModelSerializer):
+    mensagens = MensagemSerializer(many=True, read_only=True)
+    
     class Meta:
         model = RequisicaoLocacao
         fields = '__all__'
+        read_only_fields = ['dataCriacao']
 
 
 class LocacaoSerializer(serializers.ModelSerializer):

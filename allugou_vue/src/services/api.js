@@ -16,25 +16,16 @@ export const getMediaUrl = (path) => {
 export const ofertaLocacaoService = {
   async getAllOfertas() {
     try {
-      console.log('Making request to:', `${api.defaults.baseURL}/ofsloc/`)
-      const response = await api.get('/ofsloc/')
-      console.log('API Status:', response.status)
-      console.log('API Headers:', response.headers)
-      console.log('API Data:', response.data)
+      const response = await api.get('/api/ofertas/all/')
       return response
     } catch (error) {
-      console.error('API Error Details:', {
-        message: error.message,
-        status: error.response?.status,
-        statusText: error.response?.statusText,
-        data: error.response?.data
-      })
+      console.error('erro ao buscar ofertas:', error)
       throw error
     }
   },
   
   getOfertaById(id) {
-    return api.get(`/ofsloc/${id}/`)
+    return api.get(`/api/ofertas/${id}/`)
   },
   
   getImagensOferta(ofertaId) {

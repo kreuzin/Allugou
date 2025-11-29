@@ -87,7 +87,7 @@ export default {
     },
     goToSlide(index) {
       this.currentIndex = index
-      this.startTimer() // Reset timer when manually changing slides
+      this.startTimer() // reseta o timer ao apertar o botaozin de mudar slide
     }
   }
 }

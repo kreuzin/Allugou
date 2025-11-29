@@ -51,7 +51,12 @@ export default {
       })
 
       if (success) {
-        this.$router.push('/') // ir para a homepage se o login for bem-sucedido
+        // isso aq é pra redirecionar pra pagina que o user tentou acessar antes de logar
+        const redirect = this.$route.query.redirect || '/'
+        // so redireciona se n tiver na mesma pagina
+        if (this.$route.path !== redirect) {
+          this.$router.push(redirect).catch(() => {})
+        }
       }
     }
   }

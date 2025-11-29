@@ -11,14 +11,12 @@ const routes = [
   {
     path: '/',
     name: 'home',
-    component: HomeView,
-    meta: { requiresAuth: true }
+    component: HomeView
   },
   {
     path: '/about',
     name: 'about',
-    component: () => import('../views/AboutView.vue'),
-    meta: { requiresAuth: true }
+    component: () => import('../views/AboutView.vue')
   },
   {
     path: '/login',
@@ -34,6 +32,53 @@ const routes = [
     path: '/register',
     name: 'register',
     component: RegisterView
+  },
+  {
+    path: '/ads',
+    name: 'ads',
+    component: () => import('../views/AdsView.vue'),
+    meta: { requiresAuth: true, requiresLocador: true }
+  },
+  {
+    path: '/new-ad',
+    name: 'new-ad',
+    component: () => import('../views/NewAdView.vue'),
+    meta: { requiresAuth: true, requiresLocador: true }
+  },
+  {
+    path: '/edit-ad/:id',
+    name: 'edit-ad',
+    component: () => import('../views/EditAdView.vue'),
+    meta: { requiresAuth: true, requiresLocador: true }
+  },
+  {
+    path: '/oferta/:id',
+    name: 'oferta-detail',
+    component: () => import('../views/OfertaDetailView.vue')
+  },
+  {
+    path: '/requisicao/:id',
+    name: 'requisicao-detail',
+    component: () => import('../views/RequisicaoDetailView.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/minhas-requisicoes',
+    name: 'minhas-requisicoes',
+    component: () => import('../views/MinhasRequisicoesView.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/minhas-locacoes',
+    name: 'minhas-locacoes',
+    component: () => import('../views/MinhasLocacoesView.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/locacao/:id',
+    name: 'locacao-detail',
+    component: () => import('../views/LocacaoDetailView.vue'),
+    meta: { requiresAuth: true }
   }
 ]
 
@@ -51,18 +96,29 @@ router.beforeEach((to, from, next) => {
     return
   }
 
+  // verificar se a rota requer autenticação
   if (to.matched.some(record => record.meta.requiresAuth)) {
     if (!store.getters['auth/isAuthenticated']) {
       next({
         path: '/login',
         query: { redirect: to.fullPath }
       })
-    } else {
-      next()
+      return
     }
-  } else {
-    next()
+    
+    // verificar se a rota requer ser locador
+    if (to.matched.some(record => record.meta.requiresLocador)) {
+      if (!store.getters['auth/isLocador']) {
+        next({
+          path: '/',
+          query: { error: 'acesso_negado' }
+        })
+        return
+      }
+    }
   }
+  
+  next()
 })
 
 export default router

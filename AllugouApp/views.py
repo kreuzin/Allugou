@@ -13,9 +13,9 @@ def register(request):
 		form = RegisterLocadorForm(request.POST)
 		if form.is_valid():
 			locador = form.save()
-			# fazer login do usuário automaticamente
+			# loga o usuario automaticamente
 			try:
-				# buscar o usuário Django que criamos em form.save
+				# pega o user do django q a gente criou no form.save
 				from django.contrib.auth.models import User
 				user = User.objects.get(username=form.cleaned_data['username'])
 				auth_login(request, user)

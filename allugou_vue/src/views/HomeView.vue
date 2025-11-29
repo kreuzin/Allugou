@@ -22,9 +22,11 @@
         
         <div v-else class="products-grid">
           <ProductCard 
-            v-for="product in products" 
+            v-for="(product, index) in products" 
             :key="product.id" 
             :product="product"
+            class="product-card-animated"
+            :style="{ '--card-index': index }"
             @open="handleProductClick"
           />
         </div>
@@ -63,51 +65,35 @@ export default {
   },
   methods: {
     async fetchOfertas() {
-      console.log('Starting fetchOfertas')
       this.loading = true
       this.error = null
       try {
-        console.log('Making API request...')
         const response = await ofertaLocacaoService.getAllOfertas()
-        console.log('Raw response:', response)
         
         if (!response || !response.data) {
-          throw new Error('No response data received')
+          throw new Error('nenhum dado recebido')
         }
 
         // verificar se a resposta é paginada ou uma matriz direta
         let ofertas = []
-        if (Array.isArray(response.data)) {
-          console.log('Response is an array')
+        if (response.data.success && response.data.ofertas) {
+          ofertas = response.data.ofertas
+        } else if (Array.isArray(response.data)) {
           ofertas = response.data
         } else if (response.data.results) {
-          console.log('Response is paginated')
           ofertas = response.data.results
-        } else {
-          console.log('Response data:', response.data)
-          throw new Error('Unexpected response format')
         }
-
-        console.log('Ofertas array:', ofertas)
-        console.log('Number of ofertas:', ofertas.length)
         
         if (ofertas.length === 0) {
-          console.log('No ofertas found in the response')
-          this.error = 'Nenhuma oferta encontrada.'
+          this.error = 'nenhuma oferta encontrada.'
           return
         }
         
         this.products = ofertas.map(oferta => {
-          console.log('Processing individual oferta:', oferta)
-          
-          // extrair localização de dados aninhados
-          let location = 'Localização não informada'
-          if (oferta.locador && oferta.locador.endereco) {
-            const endereco = oferta.locador.endereco
-            location = `${endereco.cidade}${endereco.estado ? ` - ${endereco.estado}` : ''}`
-          }
+          // extrair localização
+          let location = oferta.localizacao_completa || 'localização não informada'
 
-          // obter URL da imagem da imagem principal ou primeira imagem disponível
+          // obter URL da imagem principal ou primeira disponível
           let imageUrl = 'https://via.placeholder.com/800x600?text=Sem+Imagem'
           if (oferta.imagem_principal && oferta.imagem_principal.imagem) {
             imageUrl = getMediaUrl(oferta.imagem_principal.imagem)
@@ -115,33 +101,28 @@ export default {
             imageUrl = getMediaUrl(oferta.imagens[0].imagem)
           }
 
-          const mapped = {
+          return {
             id: oferta.id,
-            title: oferta.titulo || 'Sem título',
-            subtitle: oferta.descricao || 'Sem descrição',
-            price: oferta.valorDiaria ? `R$${oferta.valorDiaria.toFixed(2)}` : 'Preço não informado',
+            title: oferta.titulo || 'sem título',
+            subtitle: oferta.descricao || 'sem descrição',
+            price: oferta.valorDiaria ? `R$${oferta.valorDiaria.toFixed(2)}` : 'preço não informado',
             per: 'por dia',
             location: location,
             image: imageUrl,
-            ofereceEntrega: oferta.ofereceEntrega || false,
-            rawData: oferta // manter dados brutos para depuração
+            ofereceEntrega: oferta.ofereceEntrega || false
           }
-          console.log('Mapped product:', mapped)
-          return mapped
         })
-
-        console.log('Products after mapping:', this.products)
         
       } catch (error) {
-        console.error('Error fetching ofertas:', error)
-        this.error = 'Erro ao carregar as ofertas. Por favor, tente novamente.'
+        console.error('erro ao buscar ofertas:', error)
+        this.error = 'erro ao carregar as ofertas. por favor, tente novamente.'
       } finally {
         this.loading = false
       }
     },
     handleProductClick(product) {
-      console.log('Product clicked:', product)
-      // TODO: navegar para detalhe do produto ou mostrar modal
+      // navegar para página de detalhes
+      this.$router.push(`/oferta/${product.id}`)
     }
   }
 }
@@ -205,5 +186,29 @@ export default {
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 1rem;
   }
+}
+
+/* ==================== ANIMAÇÕES DOS CARDS ==================== */
+
+/* Cards entrando com stagger */
+.product-card-animated {
+  animation: cardIn 0.5s ease-out backwards;
+  animation-delay: calc(var(--card-index, 0) * 0.08s);
+}
+
+@keyframes cardIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Spinner com animação suave */
+.spinner-border {
+  color: #00897b;
 }
 </style>
