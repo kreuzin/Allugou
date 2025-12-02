@@ -5,7 +5,7 @@
         <router-link to="/" class="navbar-brand me-4">
           <span class="brand-text"><strong>All</strong>ugou</span>
         </router-link>
-        
+                
         <template v-if="!isAuthPage">
           <form class="search-form flex-grow-1 me-4">
             <div class="input-group">
@@ -187,8 +187,48 @@
     </section>
 
 
-    <footer class="bg-dark text-white py-4 mt-auto">
-      <p class="text-center">Copyright (c) 2025</p>
+    <footer class="footer">
+      <div class="footer-container">
+        <div class="footer-col">
+          <h3>Sobre nós</h3>
+          <p>
+            A <strong>Allugou</strong> é uma plataforma dedicada a facilitar o aluguel de produtos de forma prática, rápida e segura.
+            Conectamos pessoas que precisam de equipamentos, ferramentas e objetos com quem os oferece.
+          </p>
+        </div>
+
+        <div class="footer-col">
+          <h3>Fale conosco</h3>
+          <ul>
+            <li><a href="#">📞 (21) 99999-9999</a></li>
+            <li><a href="#">✉️ contato@allugou.com.br</a></li>
+            <li><a href="#">📍 São Gonçalo - RJ</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h3>Tire suas dúvidas</h3>
+          <ul>
+            <li><a href="#">Como funciona?</a></li>
+            <li><a href="#">Segurança e pagamentos</a></li>
+            <li><a href="#">Política de devolução</a></li>
+            <li><a href="#">Ajuda e suporte</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h3>Redes sociais</h3>
+          <ul class="redes-sociais">
+            <li><a href="#">Instagram</a></li>
+            <li><a href="#">Facebook</a></li>
+            <li><a href="#">LinkedIn</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>SENAI/SG/RJ - 2025 - Allugou. Desenvolvimento de Sistemas.</p>
+      </div>
     </footer>
 
   </div>
@@ -658,7 +698,7 @@ section {
 
 /* ==================== ANIMAÇÕES ==================== */
 
-/* Badge pulsando */
+/* badge pulsando */
 @keyframes pulse {
   0%, 100% {
     transform: scale(1);
@@ -705,7 +745,7 @@ section {
   }
 }
 
-/* Itens do dropdown entrada escalonada */
+/* notificações entrando com delay */
 .notification-item {
   animation: slideInRight 0.3s ease-out backwards;
 }
@@ -727,7 +767,7 @@ section {
   }
 }
 
-/* Page transitions */
+/* page transitions */
 .page-enter-active {
   animation: pageEnter 0.35s ease-out;
 }
@@ -758,7 +798,7 @@ section {
   }
 }
 
-/* Unread dot pulsando */
+/* pontinho da notificação pulsando */
 @keyframes dotPulse {
   0%, 100% {
     opacity: 1;
@@ -772,5 +812,98 @@ section {
 
 .unread-dot {
   animation: dotPulse 1.5s ease-in-out infinite;
+}
+
+
+.footer {
+  background: linear-gradient(135deg, #00251a, #004d40);
+  color: #fff;
+  padding: 50px 0 30px;
+  font-family: inherit;
+  border-top: 3px solid #004d40;
+  margin-top: auto;
+}
+
+.footer-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 40px;
+  padding: 0 20px;
+}
+
+.footer-col h3 {
+  font-size: 1.2rem;
+  color: #fff;
+  margin-bottom: 16px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.footer-col p {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.footer-col ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-col ul li {
+  margin-bottom: 10px;
+}
+
+.footer-col ul li a {
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.8);
+  transition: color 0.3s ease;
+}
+
+.footer-col ul li a:hover {
+  color: #fff;
+  text-decoration: underline;
+}
+
+.redes-sociais li a {
+  font-weight: 600;
+}
+
+.footer-bottom {
+  text-align: center;
+  margin-top: 30px;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  padding-top: 15px;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+@media (max-width: 700px) {
+  .footer-container {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .footer-col h3 {
+    font-size: 1rem;
+  }
+
+  .footer-col p,
+  .footer-col ul li a {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .footer-container {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .footer-col {
+    margin-bottom: 25px;
+  }
 }
 </style>

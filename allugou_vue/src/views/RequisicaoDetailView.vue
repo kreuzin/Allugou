@@ -308,6 +308,138 @@
         </div>
       </div>
     </div>
+    
+    <!-- modal de pagamento fake -->
+    <div v-if="mostrarModalPagamento" class="modal-overlay" @click.self="mostrarModalPagamento = false">
+      <div class="modal-pagamento">
+        <div class="modal-header-custom">
+          <h5><i class="fa-solid fa-credit-card me-2"></i>Pagamento</h5>
+          <button @click="mostrarModalPagamento = false" class="btn-close-custom">
+            <i class="fa-solid fa-times"></i>
+          </button>
+        </div>
+        
+        <div class="modal-body-custom">
+          <!-- resumo -->
+          <div class="resumo-pagamento mb-4">
+            <h6 class="text-muted mb-2">Resumo</h6>
+            <div class="d-flex justify-content-between">
+              <span>{{ requisicao.oferta.titulo }}</span>
+            </div>
+            <div class="d-flex justify-content-between text-muted small">
+              <span>Diárias</span>
+              <span>R$ {{ (parseFloat(requisicao.valorTotal) - parseFloat(requisicao.valorFrete)).toFixed(2) }}</span>
+            </div>
+            <div v-if="!requisicao.retiradaNoLocal" class="d-flex justify-content-between text-muted small">
+              <span>Frete</span>
+              <span>R$ {{ parseFloat(requisicao.valorFrete).toFixed(2) }}</span>
+            </div>
+            <hr>
+            <div class="d-flex justify-content-between fw-bold fs-5">
+              <span>Total</span>
+              <span class="text-success">R$ {{ parseFloat(requisicao.valorTotal).toFixed(2) }}</span>
+            </div>
+          </div>
+          
+          <!-- form do cartao -->
+          <form @submit.prevent="processarPagamentoFake">
+            <div class="mb-3">
+              <label class="form-label">Número do Cartão</label>
+              <input 
+                type="text" 
+                class="form-control" 
+                v-model="dadosPagamento.numero"
+                placeholder="1234 5678 9012 3456"
+                maxlength="19"
+                @input="formatarNumeroCartao"
+                required
+              >
+            </div>
+            
+            <div class="mb-3">
+              <label class="form-label">Nome no Cartão</label>
+              <input 
+                type="text" 
+                class="form-control" 
+                v-model="dadosPagamento.nome"
+                placeholder="NOME COMPLETO"
+                @input="dadosPagamento.nome = dadosPagamento.nome.toUpperCase()"
+                required
+              >
+            </div>
+            
+            <div class="row">
+              <div class="col-6 mb-3">
+                <label class="form-label">Validade</label>
+                <input 
+                  type="text" 
+                  class="form-control" 
+                  v-model="dadosPagamento.validade"
+                  placeholder="MM/AA"
+                  maxlength="5"
+                  @input="formatarValidade"
+                  required
+                >
+              </div>
+              <div class="col-6 mb-3">
+                <label class="form-label">CVV</label>
+                <input 
+                  type="text" 
+                  class="form-control" 
+                  v-model="dadosPagamento.cvv"
+                  placeholder="123"
+                  maxlength="4"
+                  required
+                >
+              </div>
+            </div>
+            
+            <div class="mb-3">
+              <label class="form-label">CPF do Titular</label>
+              <input 
+                type="text" 
+                class="form-control" 
+                v-model="dadosPagamento.cpf"
+                placeholder="000.000.000-00"
+                maxlength="14"
+                @input="formatarCPF"
+                required
+              >
+            </div>
+            
+            <div class="d-grid gap-2 mt-4">
+              <button 
+                type="submit" 
+                class="btn btn-success btn-lg"
+                :disabled="processando || !formPagamentoValido"
+              >
+                <span v-if="processando">
+                  <i class="fa-solid fa-spinner fa-spin me-2"></i>Processando...
+                </span>
+                <span v-else>
+                  <i class="fa-solid fa-lock me-2"></i>Pagar R$ {{ parseFloat(requisicao.valorTotal).toFixed(2) }}
+                </span>
+              </button>
+              <button 
+                type="button" 
+                @click="mostrarModalPagamento = false" 
+                class="btn btn-outline-secondary"
+                :disabled="processando"
+              >
+                Cancelar
+              </button>
+            </div>
+          </form>
+          
+          <div class="text-center mt-3">
+            <small class="text-muted">
+              <i class="fa-solid fa-shield-halved me-1"></i>
+              Pagamento seguro simulado
+            </small>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -327,7 +459,15 @@ export default {
       enviandoMensagem: false,
       atualizandoStatus: false,
       chatPollingInterval: null,
-      processando: false
+      processando: false,
+      mostrarModalPagamento: false,
+      dadosPagamento: {
+        numero: '',
+        nome: '',
+        validade: '',
+        cvv: '',
+        cpf: ''
+      }
     }
   },
   computed: {
@@ -378,6 +518,13 @@ export default {
         return this.requisicao?.locatario?.tel
       }
       return this.requisicao?.oferta?.locador?.tel
+    },
+    formPagamentoValido() {
+      return this.dadosPagamento.numero.length >= 19 &&
+             this.dadosPagamento.nome.length >= 3 &&
+             this.dadosPagamento.validade.length === 5 &&
+             this.dadosPagamento.cvv.length >= 3 &&
+             this.dadosPagamento.cpf.length === 14
     }
   },
   async created() {
@@ -600,24 +747,45 @@ export default {
     // === MÉTODOS DO FLUXO DE LOCAÇÃO ===
     
     async realizarPagamento() {
-      const confirmed = await this.$confirm({
-        title: 'Confirmar pagamento',
-        message: 'Deseja confirmar o pagamento desta locação? (Simulação)',
-        type: 'info',
-        confirmText: 'Pagar',
-        cancelText: 'Cancelar'
-      })
-      
-      if (!confirmed) return
-      
+      // abre o modal de pagamento ao inves de confirmar direto
+      this.mostrarModalPagamento = true
+    },
+    
+    formatarNumeroCartao() {
+      let valor = this.dadosPagamento.numero.replace(/\D/g, '')
+      valor = valor.replace(/(\d{4})(?=\d)/g, '$1 ')
+      this.dadosPagamento.numero = valor.substring(0, 19)
+    },
+    
+    formatarValidade() {
+      let valor = this.dadosPagamento.validade.replace(/\D/g, '')
+      if (valor.length >= 2) {
+        valor = valor.substring(0, 2) + '/' + valor.substring(2, 4)
+      }
+      this.dadosPagamento.validade = valor
+    },
+    
+    formatarCPF() {
+      let valor = this.dadosPagamento.cpf.replace(/\D/g, '')
+      valor = valor.replace(/(\d{3})(\d)/, '$1.$2')
+      valor = valor.replace(/(\d{3})(\d)/, '$1.$2')
+      valor = valor.replace(/(\d{3})(\d{1,2})$/, '$1-$2')
+      this.dadosPagamento.cpf = valor
+    },
+    
+    async processarPagamentoFake() {
       this.processando = true
+      
+      // simula processamento de 2 segundos
+      await new Promise(resolve => setTimeout(resolve, 2000))
       
       try {
         const response = await api.post(`/api/requisicoes/${this.requisicao.id}/pagar/`)
         
         if (response.data.success) {
-          this.$toast.success('Pagamento realizado! Locação iniciada.', 'Sucesso!')
-          // Redireciona para a página da locação
+          this.mostrarModalPagamento = false
+          this.$toast.success('Pagamento aprovado! Locação iniciada.', 'Sucesso!')
+          // redireciona pra locação
           setTimeout(() => {
             this.$router.push(`/locacao/${response.data.locacao_id}`)
           }, 1500)
@@ -859,5 +1027,85 @@ export default {
 
 .badge.bg-warning {
   animation: badgePulse 2s ease-in-out infinite;
+}
+
+/* modal de pagamento */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1050;
+  animation: fadeIn 0.2s ease;
+}
+
+.modal-pagamento {
+  background: white;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 450px;
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: slideUp 0.3s ease;
+}
+
+.modal-header-custom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  border-bottom: 1px solid #e9ecef;
+  background: linear-gradient(135deg, #00695c, #004d40);
+  color: white;
+  border-radius: 16px 16px 0 0;
+}
+
+.modal-header-custom h5 {
+  margin: 0;
+}
+
+.btn-close-custom {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.2rem;
+  cursor: pointer;
+  opacity: 0.8;
+  transition: opacity 0.2s;
+}
+
+.btn-close-custom:hover {
+  opacity: 1;
+}
+
+.modal-body-custom {
+  padding: 20px;
+}
+
+.resumo-pagamento {
+  background: #f8f9fa;
+  padding: 15px;
+  border-radius: 8px;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 </style>

@@ -257,7 +257,11 @@
 
               <!-- input mensagem -->
               <div class="message-input-container">
-                <form @submit.prevent="enviarMensagem" class="d-flex gap-2">
+                <div v-if="chatBloqueado" class="text-center text-muted py-3">
+                  <i class="fa-solid fa-lock me-2"></i>
+                  Chat encerrado - locação {{ locacao.status === 'concluida' ? 'concluída' : 'cancelada' }}
+                </div>
+                <form v-else @submit.prevent="enviarMensagem" class="d-flex gap-2">
                   <input 
                     type="text" 
                     v-model="novaMensagem"
@@ -514,6 +518,9 @@ export default {
         return this.locacao?.locatario?.email
       }
       return this.locacao?.locador?.email
+    },
+    chatBloqueado() {
+      return this.locacao?.status === 'concluida' || this.locacao?.status === 'cancelada'
     }
   },
   async created() {

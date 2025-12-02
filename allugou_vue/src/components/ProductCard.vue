@@ -115,6 +115,7 @@ export default {
 .description-truncate {
   display: -webkit-box;
   -webkit-line-clamp: 2;
+  /*webkit line clamp serve para limitar o texto a 2 linhas e adicionar reticências*/
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
