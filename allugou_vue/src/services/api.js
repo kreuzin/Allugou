@@ -19,7 +19,9 @@ export const getMediaUrl = (path) => {
   // remove trailing slash da API_URL e garante que path começa com /
   const baseUrl = API_URL.endsWith('/') ? API_URL.slice(0, -1) : API_URL
   const normalizedPath = path.startsWith('/') ? path : `/${path}`
-  return `${baseUrl}${normalizedPath}`
+  // adiciona query param pra pular a pagina de aviso do ngrok
+  // isso é necessário pq tags <img> não enviam headers customizados
+  return `${baseUrl}${normalizedPath}?ngrok-skip-browser-warning=true`
 }
 
 export const ofertaLocacaoService = {
