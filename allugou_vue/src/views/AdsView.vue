@@ -52,13 +52,13 @@
       <div v-else class="row g-3">
         <div v-for="oferta in ofertas" :key="oferta.id" class="col-md-6 col-lg-4">
           <div class="card h-100">
-            <img 
+            <NgrokImage
               v-if="oferta.imagem_principal" 
               :src="getImageUrl(oferta.imagem_principal.imagem)" 
-              class="card-img-top"
+              img-class="card-img-top"
               alt="imagem principal"
               style="height: 200px; object-fit: cover;"
-            >
+            />
             <div v-else class="card-img-top bg-secondary d-flex align-items-center justify-content-center" style="height: 200px;">
               <i class="fa fa-image fa-3x text-white"></i>
             </div>
@@ -159,12 +159,12 @@
               <div class="row align-items-center">
                 <!-- imagem da oferta -->
                 <div class="col-md-2 col-sm-3">
-                  <img 
+                  <NgrokImage
                     v-if="req.oferta.imagemPrincipal" 
                     :src="getImageUrl(req.oferta.imagemPrincipal)" 
-                    class="img-fluid rounded requisicao-img"
+                    img-class="img-fluid rounded requisicao-img"
                     alt="imagem oferta"
-                  >
+                  />
                   <div v-else class="bg-secondary rounded d-flex align-items-center justify-content-center requisicao-img">
                     <i class="fa fa-image fa-2x text-white"></i>
                   </div>
@@ -217,8 +217,12 @@
 
 <script>
 import api from '@/utils/api'
+import NgrokImage from '@/components/NgrokImage.vue'
 
 export default {
+  components: {
+    NgrokImage
+  },
   name: 'AdsView',
   data() {
     return {

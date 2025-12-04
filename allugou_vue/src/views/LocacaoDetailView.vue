@@ -354,7 +354,7 @@
                 </p>
                 <div v-if="locacao.fotoDevolucao" class="mb-3">
                   <small class="text-muted d-block mb-2">Foto da devolução:</small>
-                  <img :src="getImageUrl(locacao.fotoDevolucao)" class="img-thumbnail" style="max-height: 200px;">
+                  <NgrokImage :src="getImageUrl(locacao.fotoDevolucao)" img-class="img-thumbnail" style="max-height: 200px;" />
                 </div>
                 <button 
                   v-if="ehLocador"
@@ -374,7 +374,7 @@
                 <p class="text-muted small mb-0">Esta locação foi finalizada com sucesso.</p>
                 <div v-if="locacao.fotoDevolucao" class="mt-3">
                   <small class="text-muted d-block mb-2">Foto da devolução:</small>
-                  <img :src="getImageUrl(locacao.fotoDevolucao)" class="img-thumbnail" style="max-height: 150px;">
+                  <NgrokImage :src="getImageUrl(locacao.fotoDevolucao)" img-class="img-thumbnail" style="max-height: 150px;" />
                 </div>
               </div>
               
@@ -442,8 +442,12 @@
 
 <script>
 import api from '@/utils/api'
+import NgrokImage from '@/components/NgrokImage.vue'
 
 export default {
+  components: {
+    NgrokImage
+  },
   name: 'LocacaoDetailView',
   data() {
     return {

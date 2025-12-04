@@ -26,12 +26,12 @@
             <div class="row align-items-center">
               <!-- imagem da oferta -->
               <div class="col-md-2 col-sm-3">
-                <img 
+                <NgrokImage
                   v-if="req.oferta.imagemPrincipal" 
-                  :src="getImageUrl(req.oferta.imagemPrincipal)" 
-                  class="img-fluid rounded requisicao-img"
+                  :src="getImageUrl(req.oferta.imagemPrincipal)"
+                  img-class="img-fluid rounded requisicao-img"
                   alt="imagem oferta"
-                >
+                />
                 <div v-else class="bg-secondary rounded d-flex align-items-center justify-content-center requisicao-img">
                   <i class="fa fa-image fa-2x text-white"></i>
                 </div>
@@ -112,8 +112,12 @@
 
 <script>
 import api from '@/utils/api'
+import NgrokImage from '@/components/NgrokImage.vue'
 
 export default {
+  components: {
+    NgrokImage
+  },
   name: 'MinhasRequisicoesView',
   data() {
     return {

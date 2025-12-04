@@ -52,7 +52,7 @@
             <div class="row g-2">
               <div v-for="img in imagensExistentes" :key="img.id" class="col-md-3">
                 <div class="position-relative image-preview-container" :class="{ 'marked-remove': imagensParaRemover.includes(img.id) }">
-                  <img :src="getImageUrl(img.imagem)" class="img-thumbnail" alt="imagem">
+                  <NgrokImage :src="getImageUrl(img.imagem)" img-class="img-thumbnail" alt="imagem" />
                   <button 
                     type="button" 
                     class="btn btn-sm position-absolute top-0 end-0 m-1"
@@ -141,8 +141,12 @@
 
 <script>
 import api from '@/utils/api'
+import NgrokImage from '@/components/NgrokImage.vue'
 
 export default {
+  components: {
+    NgrokImage
+  },
   name: 'EditAdView',
   data() {
     return {
