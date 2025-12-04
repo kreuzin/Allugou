@@ -34,12 +34,12 @@
               <div class="oferta-preview p-3 bg-light rounded">
                 <div class="row align-items-center">
                   <div class="col-auto">
-                    <img 
+                    <NgrokImage
                       v-if="imagemPrincipal" 
                       :src="imagemPrincipal" 
-                      class="oferta-thumb"
+                      img-class="oferta-thumb"
                       alt="Oferta"
-                    >
+                    />
                     <div v-else class="oferta-thumb-placeholder">
                       <i class="fa-solid fa-image"></i>
                     </div>
@@ -449,8 +449,12 @@
 
 <script>
 import api from '@/utils/api'
+import NgrokImage from '@/components/NgrokImage.vue'
 
 export default {
+  components: {
+    NgrokImage
+  },
   name: 'RequisicaoDetailView',
   data() {
     return {

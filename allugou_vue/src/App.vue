@@ -72,12 +72,12 @@
                     @click.native="closeNotifications"
                   >
                     <div class="d-flex align-items-center">
-                      <img 
+                      <NgrokImage
                         v-if="msg.oferta.imagemPrincipal" 
                         :src="getImageUrl(msg.oferta.imagemPrincipal)" 
-                        class="notification-image me-2"
+                        img-class="notification-image me-2"
                         alt="oferta"
-                      >
+                      />
                       <div v-else class="notification-image-placeholder me-2">
                         <i class="fa-solid fa-comment"></i>
                       </div>
@@ -106,12 +106,12 @@
                     @click.native="closeNotifications"
                   >
                     <div class="d-flex align-items-center">
-                      <img 
+                      <NgrokImage
                         v-if="req.oferta.imagemPrincipal" 
                         :src="getImageUrl(req.oferta.imagemPrincipal)" 
-                        class="notification-image me-2"
+                        img-class="notification-image me-2"
                         alt="oferta"
-                      >
+                      />
                       <div class="notification-content">
                         <div class="notification-title">
                           <span v-if="isLocador">Nova solicitação</span>
@@ -238,10 +238,14 @@
 import { computed } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
+import NgrokImage from '@/components/NgrokImage.vue'
 
 
 
 export default {
+  components: {
+    NgrokImage
+  },
   name: 'App',
   data() {
     return {
