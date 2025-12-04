@@ -508,7 +508,9 @@ export default {
     },
     getImageUrl(imagePath) {
       if (!imagePath) return ''
-      return `http://localhost:8000${imagePath}`
+      const apiUrl = process.env.VUE_APP_API_URL || 'http://localhost:8000'
+      const baseUrl = apiUrl.endsWith('/') ? apiUrl.slice(0, -1) : apiUrl
+      return `${baseUrl}${imagePath}?ngrok-skip-browser-warning=true`
     },
     formatPrice(value) {
       return parseFloat(value).toFixed(2).replace('.', ',')

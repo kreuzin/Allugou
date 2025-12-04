@@ -402,7 +402,9 @@ export default {
     getImageUrl(path) {
       if (!path) return null
       if (path.startsWith('http')) return path
-      return `http://localhost:8000${path}`
+      const apiUrl = process.env.VUE_APP_API_URL || 'http://localhost:8000'
+      const baseUrl = apiUrl.endsWith('/') ? apiUrl.slice(0, -1) : apiUrl
+      return `${baseUrl}${path}?ngrok-skip-browser-warning=true`
     }
   }
 }
