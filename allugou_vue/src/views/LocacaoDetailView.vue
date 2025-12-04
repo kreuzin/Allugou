@@ -772,7 +772,9 @@ export default {
       if (path.startsWith('http')) return path
       const apiUrl = process.env.VUE_APP_API_URL || 'http://localhost:8000'
       const baseUrl = apiUrl.endsWith('/') ? apiUrl.slice(0, -1) : apiUrl
-      return `${baseUrl}${path}`
+      const url = `${baseUrl}${path}`
+      console.log('LocacaoDetailView getImageUrl:', { path, apiUrl, url })
+      return url
     },
     
     startPolling() {
