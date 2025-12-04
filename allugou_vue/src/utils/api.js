@@ -1,7 +1,14 @@
 import axios from 'axios'
 
+// pega a url da api das variaveis de ambiente ou usa localhost como padrao
+// em producao a VUE_APP_API_URL vai ser a url do ngrok
+const apiUrl = process.env.VUE_APP_API_URL || 'http://localhost:8000'
+
+// guarda o token csrf em memoria pra usar nas requisicoes
+let csrfToken = null
+
 const api = axios.create({
-    baseURL: 'http://localhost:8000',
+    baseURL: apiUrl,
     withCredentials: true,
     xsrfCookieName: 'csrftoken',
     xsrfHeaderName: 'X-CSRFToken',
@@ -13,11 +20,11 @@ function getCookie(name) {
     return match ? decodeURIComponent(match[2]) : null
 }
 
-// busca o token csrf se precisar
+// busca o token csrf do servidor e guarda em memoria
 async function initializeCSRF() {
     try {
         const response = await api.get('/api/csrf/')
-        const csrfToken = response.data.csrfToken
+        csrfToken = response.data.csrfToken
         return csrfToken
     } catch (error) {
         console.error('Falha ao buscar token csrf:', error)
@@ -26,13 +33,10 @@ async function initializeCSRF() {
 
 // antes de cada request: joga o csrf no header
 api.interceptors.request.use(config => {
-    try {
-        const csrftoken = getCookie('csrftoken')
-        if (csrftoken) {
-            config.headers['X-CSRFToken'] = csrftoken
-        }
-    } catch (e) {
-        // silencioso
+    // primeiro tenta pegar do cookie, se nao tiver usa o que ta em memoria
+    const token = getCookie('csrftoken') || csrfToken
+    if (token) {
+        config.headers['X-CSRFToken'] = token
     }
     return config
 })
@@ -40,15 +44,18 @@ api.interceptors.request.use(config => {
 // trata erros de resposta
 api.interceptors.response.use(
     response => response,
-    error => {
+    async error => {
         // se der 403 e nao tentou ainda, atualiza csrf e tenta de novo
         if (error.response?.status === 403 && !error.config._retry) {
             error.config._retry = true
             // pega token novo e manda de novo
-            return initializeCSRF().then(() => api(error.config))
+            await initializeCSRF()
+            error.config.headers['X-CSRFToken'] = csrfToken
+            return api(error.config)
         }
         return Promise.reject(error)
     }
 )
 
+export { initializeCSRF }
 export default api;

@@ -23,6 +23,14 @@ media/
 # node
 node_modules/
 
+# producao
+.env.production
+.env.local
+.env.*.local
+
+# build vue
+dist/
+
 # outros
 .DS_Store
 *.swp

@@ -29,7 +29,8 @@ SECRET_KEY = 'django-insecure-fsox!b@6^p%3q(3mim4=#%cj(z9*u$ro153)kjvqtiom@(_p1y
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+# permite qualquer host pra funcionar com ngrok
+ALLOWED_HOSTS = ['*']
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
@@ -55,6 +56,7 @@ INSTALLED_APPS = [
     'corsheaders',
 ]
 
+ALLOWED_HOSTS = ['*']
 
 
 MIDDLEWARE = [
@@ -69,20 +71,27 @@ MIDDLEWARE = [
 ]
 
 # CORS settings
+# permite qualquer origem pra funcionar com ngrok e vercel
+CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:8080",
-    "http://127.0.0.1:8080",
-]
 
 # CSRF settings
+# adicione a url do vercel e do ngrok aqui quando tiver
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:8080",
     "http://127.0.0.1:8080",
+    # quando fizer deploy adicione as urls abaixo
+    # "https://seu-app.vercel.app",
+    "https://nonsanative-coucha-sonja.ngrok-free.dev",
 ]
-CSRF_COOKIE_SECURE = False
+# configuracoes pra funcionar cross-origin (vercel -> ngrok)
+CSRF_COOKIE_SECURE = True
 CSRF_COOKIE_HTTPONLY = False
-CSRF_COOKIE_SAMESITE = 'Lax'
+CSRF_COOKIE_SAMESITE = 'None'
+
+# configuracoes de sessao pra funcionar cross-origin (2 urls diferentes)
+SESSION_COOKIE_SECURE = True
+SESSION_COOKIE_SAMESITE = 'None'
 
 ROOT_URLCONF = 'Allugou.urls'
 
