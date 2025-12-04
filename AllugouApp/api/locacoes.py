@@ -141,7 +141,7 @@ class LocacaoDetailView(APIView):
         for img in locacao.oferta.imagens.all():
             imagens.append({
                 'id': img.id,
-                'url': img.imagem.url,
+                'url': img.imagem.url.replace('/media/', '/api/media/'),
                 'ehPrincipal': img.ehImagemPrincipal
             })
         
