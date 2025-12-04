@@ -14,8 +14,13 @@ const api = axios.create({
 
 export const getMediaUrl = (path) => {
   if (!path) return null
+  // se ja é url completa, retorna direto
   if (path.startsWith('http')) return path
-  return `${API_URL}${path}`
+  // garante que o path começa com /
+  const normalizedPath = path.startsWith('/') ? path : `/${path}`
+  const url = `${API_URL}${normalizedPath}`
+  console.log('getMediaUrl:', { path, API_URL, url })  // debug temporario
+  return url
 }
 
 export const ofertaLocacaoService = {
