@@ -157,7 +157,11 @@
 
               <!-- campo de mensagem -->
               <div class="message-input-container">
-                <form @submit.prevent="enviarMensagem" class="d-flex gap-2">
+                <div v-if="chatBloqueado" class="text-center text-muted py-3">
+                  <i class="fa-solid fa-lock me-2"></i>
+                  Chat encerrado - requisição recusada
+                </div>
+                <form v-else @submit.prevent="enviarMensagem" class="d-flex gap-2">
                   <input 
                     type="text" 
                     v-model="novaMensagem"
@@ -525,6 +529,10 @@ export default {
              this.dadosPagamento.validade.length === 5 &&
              this.dadosPagamento.cvv.length >= 3 &&
              this.dadosPagamento.cpf.length === 14
+    },
+    chatBloqueado() {
+      // chat indisponivel quando requisicao recusada
+      return this.requisicao?.status === 'recusada'
     }
   },
   async created() {

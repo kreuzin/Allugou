@@ -1,10 +1,15 @@
 import axios from 'axios'
 
-const API_URL = 'http://localhost:8000'
+// pega a url da api das variaveis de ambiente ou usa localhost como padrao
+const API_URL = process.env.VUE_APP_API_URL || 'http://localhost:8000'
 
 const api = axios.create({
   baseURL: API_URL,
-  timeout: 5000
+  timeout: 5000,
+  withCredentials: true,
+  headers: {
+    'ngrok-skip-browser-warning': 'true'
+  }
 })
 
 export const getMediaUrl = (path) => {
