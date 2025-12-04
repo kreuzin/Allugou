@@ -500,7 +500,7 @@ class MinhasLocacoesLocadorView(APIView):
                 'oferta': {
                     'id': loc.oferta.id,
                     'titulo': loc.oferta.titulo,
-                    'imagemPrincipal': img_principal.imagem.url if img_principal else None
+                    'imagemPrincipal': img_principal.imagem.url.replace('/media/', '/api/media/') if img_principal else None
                 },
                 'locatario': {
                     'id': loc.locatario.id,
