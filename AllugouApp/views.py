@@ -41,10 +41,12 @@ def serve_media_cors(request, path):
     # headers CORS - todos necessarios pra funcionar em Firefox/Chrome
     response['Access-Control-Allow-Origin'] = '*'
     response['Access-Control-Allow-Methods'] = 'GET, HEAD, OPTIONS'
-    response['Access-Control-Allow-Headers'] = 'Origin, Content-Type, Accept, Range'
+    response['Access-Control-Allow-Headers'] = 'Origin, Content-Type, Accept, Range, ngrok-skip-browser-warning'
     response['Cross-Origin-Resource-Policy'] = 'cross-origin'
-    response['Cross-Origin-Embedder-Policy'] = 'unsafe-none'
     response['X-Content-Type-Options'] = 'nosniff'
+    
+    # header pro ngrok nao mostrar pagina de aviso
+    response['ngrok-skip-browser-warning'] = 'true'
     
     # cache pra performance
     response['Cache-Control'] = 'public, max-age=86400'
