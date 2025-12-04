@@ -5,6 +5,14 @@ from django.db.models import Q, Count
 from ..models import RequisicaoLocacao, Locador, Locatario, OfertaLocacao, Mensagem
 
 
+def get_api_media_url(image_field):
+    """Helper para converter /media/ em /api/media/"""
+    if not image_field:
+        return None
+    url = image_field.url if hasattr(image_field, 'url') else str(image_field)
+    return url.replace('/media/', '/api/media/')
+
+
 class NotificacoesLocadorView(APIView):
     """
     lista requisições feitas para ofertas do locador logado
@@ -55,7 +63,7 @@ class NotificacoesLocadorView(APIView):
         for msg in mensagens_nao_lidas_qs:
             req = msg.requisicao
             imagem_principal = req.ofertaLocacao.imagens.filter(ehImagemPrincipal=True).first()
-            imagem_url = imagem_principal.imagem.url if imagem_principal else None
+            imagem_url = get_api_media_url(imagem_principal.imagem) if imagem_principal else None
             
             # ve se tem locacao
             locacao_id = None
@@ -91,7 +99,7 @@ class NotificacoesLocadorView(APIView):
         for req in requisicoes:
             # pega imagem principal da oferta
             imagem_principal = req.ofertaLocacao.imagens.filter(ehImagemPrincipal=True).first()
-            imagem_url = imagem_principal.imagem.url if imagem_principal else None
+            imagem_url = get_api_media_url(imagem_principal.imagem) if imagem_principal else None
             
             # ve se tem locacao ja criada (foi pago)
             locacao_id = None
@@ -184,7 +192,7 @@ class NotificacoesLocatarioView(APIView):
         for msg in mensagens_nao_lidas_qs:
             req = msg.requisicao
             imagem_principal = req.ofertaLocacao.imagens.filter(ehImagemPrincipal=True).first()
-            imagem_url = imagem_principal.imagem.url if imagem_principal else None
+            imagem_url = get_api_media_url(imagem_principal.imagem) if imagem_principal else None
             
             # ve se tem locacao
             locacao_id = None
@@ -219,7 +227,7 @@ class NotificacoesLocatarioView(APIView):
         requisicoes_data = []
         for req in requisicoes:
             imagem_principal = req.ofertaLocacao.imagens.filter(ehImagemPrincipal=True).first()
-            imagem_url = imagem_principal.imagem.url if imagem_principal else None
+            imagem_url = get_api_media_url(imagem_principal.imagem) if imagem_principal else None
             
             # ve se ja criou locacao (pagou)
             locacao_id = None

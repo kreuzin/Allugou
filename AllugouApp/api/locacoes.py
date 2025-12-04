@@ -205,7 +205,7 @@ class LocacaoDetailView(APIView):
                 'dataPagamento': locacao.dataPagamento.isoformat() if locacao.dataPagamento else None,
                 'locatarioConfirmouRecebimento': locacao.locatarioConfirmouRecebimento,
                 'dataConfirmacaoRecebimento': locacao.dataConfirmacaoRecebimento.isoformat() if locacao.dataConfirmacaoRecebimento else None,
-                'fotoDevolucao': locacao.fotoDevolucao.url if locacao.fotoDevolucao else None,
+                'fotoDevolucao': locacao.fotoDevolucao.url.replace('/media/', '/api/media/') if locacao.fotoDevolucao else None,
                 'dataDevolucao': locacao.dataDevolucao.isoformat() if locacao.dataDevolucao else None,
                 'locadorConfirmouDevolucao': locacao.locadorConfirmouDevolucao,
                 'dataConfirmacaoDevolucao': locacao.dataConfirmacaoDevolucao.isoformat() if locacao.dataConfirmacaoDevolucao else None,
@@ -325,7 +325,7 @@ class EnviarFotoDevolucaoView(APIView):
             'success': True,
             'message': 'Foto de devolução enviada!',
             'status': locacao.status,
-            'foto_url': locacao.fotoDevolucao.url if locacao.fotoDevolucao else None
+            'foto_url': locacao.fotoDevolucao.url.replace('/media/', '/api/media/') if locacao.fotoDevolucao else None
         })
 
 
