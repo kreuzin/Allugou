@@ -2,7 +2,7 @@
 tentando criar um middleware para adicionar o header ngrok-skip-browser-warning em todas as respostas
 para evitar a página de aviso do ngrok q ta enchendo o saco
 """
-
+#nem tamo usano eu ach
 class NgrokHeaderMiddleware:
     """
     Adiciona header ngrok-skip-browser-warning em todas as respostas

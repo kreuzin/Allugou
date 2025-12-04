@@ -38,12 +38,12 @@
           <div class="card mb-4 shadow-sm">
             <div class="card-body">
               <div class="d-flex align-items-center">
-                <img 
+                <NgrokImage
                   v-if="imagemPrincipal" 
                   :src="imagemPrincipal" 
-                  class="oferta-thumb me-3"
+                  img-class="oferta-thumb me-3"
                   alt="imagem oferta"
-                >
+                />
                 <div v-else class="oferta-thumb-placeholder me-3">
                   <i class="fa-solid fa-image"></i>
                 </div>
