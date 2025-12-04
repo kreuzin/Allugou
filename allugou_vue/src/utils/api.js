@@ -12,6 +12,9 @@ const api = axios.create({
     withCredentials: true,
     xsrfCookieName: 'csrftoken',
     xsrfHeaderName: 'X-CSRFToken',
+    headers: {
+        'ngrok-skip-browser-warning': 'true'  // pula a pagina de aviso do ngrok
+    }
 })
 
 // pega cookie pelo nome

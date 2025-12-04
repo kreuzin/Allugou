@@ -71,17 +71,36 @@ MIDDLEWARE = [
 ]
 
 # CORS settings
-# permite qualquer origem pra funcionar com ngrok e vercel
-CORS_ALLOW_ALL_ORIGINS = True
+# nao pode usar CORS_ALLOW_ALL_ORIGINS com credentials true
+# tem que listar as origens permitidas
+CORS_ALLOW_ALL_ORIGINS = False  # IMPORTANTE: tem que ser False pra funcionar com credentials
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:8080",
+    "http://127.0.0.1:8080",
+    "https://allugou.vercel.app",
+    "https://nonsanative-coucha-sonja.ngrok-free.dev",
+]
 CORS_ALLOW_CREDENTIALS = True
+# headers permitidos nas requisicoes cross-origin
+CORS_ALLOW_HEADERS = [
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+    'ngrok-skip-browser-warning',  # header do ngrok
+]
 
 # CSRF settings
 # adicione a url do vercel e do ngrok aqui quando tiver
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:8080",
     "http://127.0.0.1:8080",
-    # quando fizer deploy adicione as urls abaixo
-    # "https://seu-app.vercel.app",
+    "https://allugou.vercel.app",
     "https://nonsanative-coucha-sonja.ngrok-free.dev",
 ]
 # configuracoes pra funcionar cross-origin (vercel -> ngrok)
