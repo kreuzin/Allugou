@@ -371,7 +371,7 @@ class RequisicaoDetailView(APIView):
         for img in requisicao.ofertaLocacao.imagens.all():
             imagens.append({
                 'id': img.id,
-                'url': img.imagem.url,
+                'url': img.imagem.url.replace('/media/', '/api/media/'),
                 'ehPrincipal': img.ehImagemPrincipal
             })
         
