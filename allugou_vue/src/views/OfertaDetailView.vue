@@ -20,10 +20,10 @@
           <div class="image-gallery">
             <!-- imagem principal -->
             <div class="main-image-container">
-              <img 
+              <NgrokImage
                 :src="getImageUrl(currentImage)" 
                 :alt="oferta.titulo"
-                class="main-image"
+                img-class="main-image"
               />
               <!-- navegação da galeria -->
               <button 
@@ -50,7 +50,7 @@
                 @click="currentImageIndex = index"
                 :class="['thumbnail', { active: currentImageIndex === index }]"
               >
-                <img :src="getImageUrl(imagem.imagem)" :alt="`imagem ${index + 1}`" />
+                <NgrokImage :src="getImageUrl(imagem.imagem)" :alt="`imagem ${index + 1}`" />
               </div>
             </div>
           </div>
@@ -383,9 +383,13 @@
 
 <script>
 import api from '@/utils/api'
+import NgrokImage from '@/components/NgrokImage.vue'
 
 export default {
   name: 'OfertaDetailView',
+  components: {
+    NgrokImage
+  },
   data() {
     return {
       oferta: null,
