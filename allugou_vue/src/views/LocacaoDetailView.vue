@@ -471,8 +471,8 @@ export default {
     },
     imagemPrincipal() {
       if (!this.locacao?.oferta?.imagens) return null
-      const principal = this.locacao.oferta.imagens.find(img => img.ehImagemPrincipal)
-      const url = principal?.imagem || this.locacao.oferta.imagens[0]?.imagem || null
+      const principal = this.locacao.oferta.imagens.find(img => img.ehPrincipal)
+      const url = principal?.url || this.locacao.oferta.imagens[0]?.url || null
       return this.getImageUrl(url)
     },
     statusBadgeClass() {

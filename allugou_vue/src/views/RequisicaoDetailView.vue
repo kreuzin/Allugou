@@ -484,8 +484,8 @@ export default {
     },
     imagemPrincipal() {
       if (!this.requisicao?.oferta?.imagens) return null
-      const principal = this.requisicao.oferta.imagens.find(img => img.ehImagemPrincipal)
-      const url = principal?.imagem || this.requisicao.oferta.imagens[0]?.imagem || null
+      const principal = this.requisicao.oferta.imagens.find(img => img.ehPrincipal)
+      const url = principal?.url || this.requisicao.oferta.imagens[0]?.url || null
       return this.getImageUrl(url)
     },
     statusBadgeClass() {
