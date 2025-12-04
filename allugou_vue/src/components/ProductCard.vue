@@ -2,7 +2,7 @@
   <a href="#" class="product-card" @click.prevent="open">
     <div class="card shadow-sm h-100">
       <div class="card-img-wrapper">
-        <img :src="product.image" class="card-img-top" :alt="product.title" @load="onLoad" @error="onError"/>
+        <NgrokImage :src="product.image" img-class="card-img-top" :alt="product.title"/>
       </div>
       <div class="card-body d-flex flex-column">
         <h5 class="card-title text-truncate">{{ product.title }}</h5>
@@ -29,20 +29,19 @@
 </template>
 
 <script>
+import NgrokImage from './NgrokImage.vue'
+
 export default {
   name: 'ProductCard',
+  components: {
+    NgrokImage
+  },
   props: {
     product: { type: Object, required: true }
   },
   methods: {
     open () {
       this.$emit('open', this.product)
-    },
-    onLoad() {
-      console.log('Imagem carregou com sucesso:', this.product.image)
-    },
-    onError(e) {
-      console.error('Erro ao carregar imagem:', this.product.image, e.target.naturalWidth, e.target.naturalHeight)
     }
   }
 }

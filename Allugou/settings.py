@@ -62,6 +62,7 @@ ALLOWED_HOSTS = ['*']
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'corsheaders.middleware.CorsMiddleware',  # adicionado para CORS
+    'AllugouApp.middleware.NgrokHeaderMiddleware',  # adiciona header do ngrok em todas respostas
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
