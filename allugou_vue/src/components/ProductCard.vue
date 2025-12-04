@@ -2,7 +2,7 @@
   <a href="#" class="product-card" @click.prevent="open">
     <div class="card shadow-sm h-100">
       <div class="card-img-wrapper">
-        <img :src="product.image" class="card-img-top" :alt="product.title"/>
+        <img :src="product.image" class="card-img-top" :alt="product.title" crossorigin="anonymous"/>
       </div>
       <div class="card-body d-flex flex-column">
         <h5 class="card-title text-truncate">{{ product.title }}</h5>

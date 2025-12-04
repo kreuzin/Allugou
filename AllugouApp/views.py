@@ -1,11 +1,53 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth import login as auth_login
+from django.http import FileResponse, Http404, HttpResponse
+from django.conf import settings
+from django.views.decorators.csrf import csrf_exempt
 from .forms import RegisterLocadorForm
 from .models import Locador
+import os
+import mimetypes
 
 
-
+@csrf_exempt
+def serve_media_cors(request, path):
+    """
+    serve arquivos de mídia com headers CORS para funcionar cross-origin.
+    necessário porque o Django static() não adiciona headers CORS.
+    """
+    # handle preflight OPTIONS request
+    if request.method == 'OPTIONS':
+        response = HttpResponse()
+        response['Access-Control-Allow-Origin'] = '*'
+        response['Access-Control-Allow-Methods'] = 'GET, OPTIONS'
+        response['Access-Control-Allow-Headers'] = 'Origin, Content-Type, Accept'
+        return response
+    
+    file_path = os.path.join(settings.MEDIA_ROOT, path)
+    
+    if not os.path.exists(file_path):
+        raise Http404("Arquivo não encontrado")
+    
+    # detecta o content-type baseado na extensão
+    content_type, _ = mimetypes.guess_type(file_path)
+    if content_type is None:
+        content_type = 'application/octet-stream'
+    
+    # le o arquivo e cria resposta com content-type correto
+    with open(file_path, 'rb') as f:
+        response = HttpResponse(f.read(), content_type=content_type)
+    
+    # headers CORS
+    response['Access-Control-Allow-Origin'] = '*'
+    response['Access-Control-Allow-Methods'] = 'GET, OPTIONS'
+    response['Access-Control-Allow-Headers'] = 'Origin, Content-Type, Accept'
+    response['Cross-Origin-Resource-Policy'] = 'cross-origin'
+    
+    # cache pra performance
+    response['Cache-Control'] = 'public, max-age=86400'
+    
+    return response
 
 
 def register(request):

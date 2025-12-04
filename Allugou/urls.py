@@ -85,5 +85,10 @@ urlpatterns = [
     path('api/locacoes/<int:locacao_id>/mensagem/', EnviarMensagemLocacaoView.as_view(), name='api_mensagem_locacao'),
 ]
 
+# servir arquivos de midia com CORS headers
+# usa view customizada ao inves de static() pra funcionar cross-origin
 if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    from AllugouApp.views import serve_media_cors
+    urlpatterns += [
+        path('media/<path:path>', serve_media_cors, name='serve_media'),
+    ]
