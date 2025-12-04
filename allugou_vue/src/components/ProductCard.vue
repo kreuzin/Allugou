@@ -2,7 +2,7 @@
   <a href="#" class="product-card" @click.prevent="open">
     <div class="card shadow-sm h-100">
       <div class="card-img-wrapper">
-        <img :src="product.image" class="card-img-top" :alt="product.title" @error="onImageError"/>
+        <img :src="product.image" class="card-img-top" :alt="product.title"/>
       </div>
       <div class="card-body d-flex flex-column">
         <h5 class="card-title text-truncate">{{ product.title }}</h5>
@@ -37,9 +37,6 @@ export default {
   methods: {
     open () {
       this.$emit('open', this.product)
-    },
-    onImageError(e) {
-      console.error('Erro ao carregar imagem:', this.product.image, e)
     }
   }
 }

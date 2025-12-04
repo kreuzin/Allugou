@@ -16,11 +16,10 @@ export const getMediaUrl = (path) => {
   if (!path) return null
   // se ja é url completa, retorna direto
   if (path.startsWith('http')) return path
-  // garante que o path começa com /
+  // remove trailing slash da API_URL e garante que path começa com /
+  const baseUrl = API_URL.endsWith('/') ? API_URL.slice(0, -1) : API_URL
   const normalizedPath = path.startsWith('/') ? path : `/${path}`
-  const url = `${API_URL}${normalizedPath}`
-  console.log('getMediaUrl:', { path, API_URL, url })  // debug temporario
-  return url
+  return `${baseUrl}${normalizedPath}`
 }
 
 export const ofertaLocacaoService = {
