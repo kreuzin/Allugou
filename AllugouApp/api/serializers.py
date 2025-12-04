@@ -18,10 +18,20 @@ class LocadorSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class ImagemOfertaSerializer(serializers.ModelSerializer):
+    imagem = serializers.SerializerMethodField()
+    
     class Meta:
         model = ImagemOferta
         fields = '__all__'
         read_only_fields = ['dataCriacao']
+    
+    def get_imagem(self, obj):
+        # retorna URL da API de media ao inves do path direto
+        if obj.imagem:
+            path = obj.imagem.url
+            # substitui /media/ por /api/media/
+            return path.replace('/media/', '/api/media/')
+        return None
 
 class OfertaLocacaoSerializer(serializers.ModelSerializer):
     imagens = ImagemOfertaSerializer(many=True, read_only=True)

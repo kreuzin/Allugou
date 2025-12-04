@@ -225,7 +225,7 @@ export default {
       if (imagePath.startsWith('http')) return imagePath
       const apiUrl = process.env.VUE_APP_API_URL || 'http://localhost:8000'
       const baseUrl = apiUrl.endsWith('/') ? apiUrl.slice(0, -1) : apiUrl
-      return `${baseUrl}${imagePath}?ngrok-skip-browser-warning=true`
+      return `${baseUrl}${imagePath}`
     },
     
     toggleRemoveImage(imgId) {

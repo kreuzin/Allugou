@@ -26,6 +26,7 @@ from AllugouApp.api.notifications import (
     AtualizarStatusRequisicaoView,
     EnviarMensagemView
 )
+from AllugouApp.views import serve_media_cors
 from AllugouApp.api.locacoes import (
     PagarRequisicaoView,
     LocacaoDetailView,
@@ -83,12 +84,6 @@ urlpatterns = [
     path('api/locacoes/<int:locacao_id>/foto-devolucao/', EnviarFotoDevolucaoView.as_view(), name='api_foto_devolucao'),
     path('api/locacoes/<int:locacao_id>/confirmar-devolucao/', ConfirmarDevolucaoView.as_view(), name='api_confirmar_devolucao'),
     path('api/locacoes/<int:locacao_id>/mensagem/', EnviarMensagemLocacaoView.as_view(), name='api_mensagem_locacao'),
+    # servir arquivos de midia com CORS headers via API
+    path('api/media/<path:path>', serve_media_cors, name='serve_media'),
 ]
-
-# servir arquivos de midia com CORS headers
-# usa view customizada ao inves de static() pra funcionar cross-origin
-if settings.DEBUG:
-    from AllugouApp.views import serve_media_cors
-    urlpatterns += [
-        path('media/<path:path>', serve_media_cors, name='serve_media'),
-    ]
