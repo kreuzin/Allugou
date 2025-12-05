@@ -1,27 +1,29 @@
 <template>
   <div id="wrapper">
     <nav class="navbar navbar-dark">
-      <div class="container d-flex align-items-center py-2">
-        <router-link to="/" class="navbar-brand me-4">
-          <span class="brand-text"><strong>All</strong>ugou</span>
-        </router-link>
-                
-        <template v-if="!isAuthPage">
-          <form class="search-form flex-grow-1 me-4">
-            <div class="input-group">
-              <input 
-                type="search" 
-                class="form-control search-input" 
-                placeholder="Do que está precisando?"
-                aria-label="Buscar"
-              />
-              <button class="btn search-button" type="submit">
-                <i class="fa fa-search"></i>
-              </button>
-            </div>
-          </form>
+      <div class="container py-2">
+        <!-- Primeira linha: Logo + Busca + Notificações -->
+        <div class="navbar-top d-flex align-items-center w-100">
+          <router-link to="/" class="navbar-brand">
+            <span class="brand-text"><strong>All</strong>ugou</span>
+          </router-link>
+                  
+          <template v-if="!isAuthPage">
+            <form class="search-form flex-grow-1">
+              <div class="input-group">
+                <input 
+                  type="search" 
+                  class="form-control search-input" 
+                  placeholder="Do que está precisando?"
+                  aria-label="Buscar"
+                />
+                <button class="btn search-button" type="submit">
+                  <i class="fa fa-search"></i>
+                </button>
+              </div>
+            </form>
 
-          <div class="notifications me-4" v-if="isAuthenticated">
+            <div class="notifications" v-if="isAuthenticated">
             <div class="dropdown">
               <button 
                 class="btn btn-icon" 
@@ -138,11 +140,11 @@
               </transition>
             </div>
           </div>
-        </template>
-        
+          </template>
+        </div>
 
-        <!-- se nao for a pagina do login mostra funções extras -->
-        <div class="nav-buttons d-flex gap-2 align-items-center" v-if="!isAuthPage">
+        <!-- Segunda linha: Botões (mobile ficam abaixo) -->
+        <div class="navbar-buttons" v-if="!isAuthPage">
           <template v-if="isAuthenticated">
             <!-- botões exclusivos para locadores -->
             <template v-if="isLocador">
@@ -549,13 +551,116 @@ section {
   background-color: #d32f2f;
 }
 
-@media (max-width: 992px) {
-  .nav-buttons {
-    display: none !important;
+/* Layout responsivo estilo OLX */
+.navbar-top {
+  gap: 0.75rem;
+}
+
+.navbar-buttons {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 0;
+}
+
+/* Desktop - tudo na mesma linha */
+@media (min-width: 769px) {
+  .container {
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+  }
+  
+  .navbar-top {
+    flex: 1;
+    margin-right: 1rem;
+  }
+  
+  .navbar-brand {
+    margin-right: 1rem;
+  }
+  
+  .search-form {
+    margin-right: 1rem;
   }
   
   .notifications {
-    margin-right: 0 !important;
+    margin-right: 1rem;
+  }
+}
+
+/* Mobile - layout em duas linhas */
+@media (max-width: 768px) {
+  .navbar {
+    padding: 0.5rem 0;
+  }
+  
+  .container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  
+  .navbar-top {
+    width: 100%;
+    gap: 0.5rem;
+  }
+  
+  .navbar-brand {
+    margin-right: 0;
+    flex-shrink: 0;
+  }
+  
+  .brand-text {
+    font-size: 1.5rem;
+  }
+  
+  .search-form {
+    flex: 1;
+    max-width: none;
+    margin: 0;
+  }
+  
+  .search-input {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.9rem;
+  }
+  
+  .search-button {
+    padding: 0 1rem;
+    font-size: 1rem;
+  }
+  
+  .notifications {
+    margin: 0;
+    flex-shrink: 0;
+  }
+  
+  .notifications .btn-icon {
+    font-size: 1.2rem;
+  }
+  
+  .navbar-buttons {
+    width: 100%;
+    margin-top: 0.5rem;
+    justify-content: flex-start;
+  }
+  
+  .navbar-buttons .btn {
+    padding: 0.4rem 0.75rem;
+    font-size: 0.85rem;
+  }
+  
+  .navbar-buttons .d-flex.align-items-center {
+    font-size: 0.85rem;
+  }
+  
+  /* Notificações dropdown em mobile */
+  .notification-dropdown {
+    width: calc(100vw - 30px);
+    max-width: 360px;
+    right: -15px;
   }
 }
 
