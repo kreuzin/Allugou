@@ -566,7 +566,7 @@ section {
 
 /* Desktop - tudo na mesma linha */
 @media (min-width: 769px) {
-  .container {
+  .navbar .container {
     display: flex;
     align-items: center;
     flex-wrap: nowrap;
@@ -596,7 +596,7 @@ section {
     padding: 0.5rem 0;
   }
   
-  .container {
+  .navbar .container {
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
